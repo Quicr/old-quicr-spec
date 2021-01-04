@@ -1,1 +1,4 @@
-# quicr-spec
+# Specification for QuicR
+
+TODO
+
