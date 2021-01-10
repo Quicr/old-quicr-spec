@@ -1,7 +1,10 @@
 
-all: gen/design.pdf 
+all: gen/quicr-spec.pdf 
+
+clean:
+	rm -rf gen/*
 
 
-gen/design.pdf: design.md
-	pandoc -s design.md -o gen/design.pdf
+gen/quicr-spec.pdf: quicr-spec.md
+	pandoc -s quicr-spec.md -o gen/quicr-spec.pdf
 
