@@ -420,25 +420,29 @@ are:
 - QuicR Application APi: provides API at top of chain for the
   application
 
-- Fragment: Fragments downstream packets to 1200 bytes and reassembles
+- EncryptPipe: Encrypt , Decrypt, Authenticate data 
+
+- FragmentPipe: Fragments downstream packets to 1200 bytes and reassembles
   and de duplicates upstream packets
 
-- Subscribe: Keep track of subscriptions, refreshes them, and filters
+- SubscribePipe: Keep track of subscriptions, refreshes them, and filters
   incoming data
 
-- FEC: Deals with forward error correct and redundant sending of packets
+- FecPipe: Deals with forward error correct and redundant sending of packets
 
-- Retransmission: Deals with retransmission of reliable packets 
+- RetransmitPip3: Deals with retransmission of reliable packets 
 
-- Priority Queue: Deal with ordering of upstream packets and discarding
+- PriorityPipe: Deal with ordering of upstream packets and discarding
 old packets. Also does consolidation of multiple packets.
 
-- Pacer: Linked with congestion controller and decides when to send the
+- PacerPipe: Linked with congestion controller and decides when to send the
   next packer.
 
-- State: Keeps track of state if connection is open or not 
+- ConnectionPipe : Keeps track of state if connection is open or not 
 
-- UDP: Bottom UDP layer that sends and receives the UDP level packets a
+- CrazyBitPipe: Implements spin bit
+
+- UdpPipe: Bottom UDP layer that sends and receives the UDP level packets a
 
 Other key parts include the:
 
@@ -456,6 +460,56 @@ backtracking.
 
 Given most modern processors are little endian, integers are encoded in
 little endian format and not network byte order.
+
+## EBNF
+
+EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
+
+
+
+Message ::= (Sync | SyncAck | Reset |  Ack | Rate | Nack | Data | Sub ) Header
+
+Sync ::= tagSync origin senderID clientTime versionVec1
+
+SyncAck ::= tagSyncAck ok
+
+Reset ::= tagReset 
+
+Ack ::= tagAck recvTime seqNum ackVec ecnVec 
+
+Rate ::= tagRate bitRate
+
+Nack := relaySeqNum 
+
+Data ::=   tagSqeNum seqNum ( EncryptDataBlock | DataBlock ) ShortName LIfeTime 
+
+Sub ::=
+
+
+ShortName ::= 
+
+LifteTime ::= varInt
+
+EncryptDataBlock ::= tagEncData1 length authDataBytes dataBytes 
+
+DataBlock ::= tagData length dataBytes 
+
+Header ::= tagExtraMagic1 ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) 
+
+
+
+
+bitRate ::= varInt
+
+seqNum ::= varInt
+
+senderID ::= varInt
+
+clientTime ::= varInt
+
+versionVec1 ::= varInt 
+
+varInt ::= Int7 | Int14 | Int29 | Int60
 
 ## Variable length integer
 
@@ -498,7 +552,8 @@ that and one bit used for a spin bit.
 ## Sync, SyncAck
 
 Sync has senderID , auth, origin DNS name,
-   
+
+ 
 Has default resourceID , senderID, relaySenderID , and souceID. 
 
 Sync has relay Seq Num, user extension vector 
@@ -521,6 +576,9 @@ SyncAck has user version vector
 Sent 1 per second to allow for stateless failover of relays. 
 
 must be authenticated 
+
+Authentication designed to be allow on path attacker to see the auth so
+that an onpath relay can insert itself into the flow.
 
 
 ## Reset
