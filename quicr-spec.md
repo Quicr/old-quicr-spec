@@ -1,6 +1,6 @@
 % QuicR Design 
 % Cullen Jennings
-% Dec 2020
+% Jan 2020
 
 # QuicR - Quick Real-time Data Transport
 
@@ -36,7 +36,7 @@ a game or video call with under a hundred milliseconds of latency and
 meets needs of web conferring systems. The design can also be used for
 large scale low latency streaming to millions of participants with
 latency under a few hundred milliseconds.  It can also be used as low
-latency pub/sub sytem for real time in systems such as messaging and
+latency pub/sub system for real time in systems such as messaging and
 IoT.
 
 Like QUIC, QuicR can be implement outside of OS Kernel and sits on top
@@ -51,9 +51,12 @@ transports.
 
 In the simple case, an web application could have a single relay in the
 cloud that forwarded packets between users in a video conference.  The
-cloud could also have multiple relays.  QuicR is designed to make it
+cloud could also have multiple relays.  
+QuicR is designed to make it
 easy to implement stateless relays so that fail over could happen
-between relays with minimal impact to the clients.  It is also designed
+between relays with minimal impact to the clients and relays can redirect
+a client to a different relay.  
+It is also designed
 to allow high speed forwarding with ASICs, or NIC cards with on card
 processing, or use intel DPDK. Relay can also be chained so that a relay
 in a CDN network gets one copy of data from the central cloud data
@@ -98,7 +101,8 @@ of the encoding and implementation details.
 
 - Packet: A UDP message sent by the transport.
 
-- Data: Application level chunk of Data that has a unique Name 
+- Data: Application level chunk of Data that has a unique Name, 
+  a limited lifetime, 
   and is transported as a datagram by this protocol. 
   
 
@@ -141,13 +145,13 @@ Data names are formed by the concatenation of several parts:
   RFC3986. Much like HTTP a resource.  Example: conferences number
 
 - Sender Name: Identifies a single endpoint client within that Resource
-  that publishes data.  MUST hash to unique 25 bit value within
+  that publishes data.  MUST hash to unique 29 bit value within
   Origin/Resource scope.  Example: fluffy_gmail_com
 
 - Source Name: Identifies a stream of media or content from that Sender.
   Example: A client that was sending media from a camera, a mic, and
   screen share might use a different sourceID for each one.  Must hash
-  to unique 6 bit value within scope of origin/resource/sender scope.  A
+  to unique 7 bit value within scope of origin/resource/sender scope.  A
   scalable codec with multiple layers would probably use a a different
   SourceID for each layer.
 
@@ -156,17 +160,18 @@ Data names are formed by the concatenation of several parts:
   media was recorded.  When using a TAI time, should be formatted as
   1990-12-31T23-59.601Z with leading zeros.  Example: For an audio
   stream, this could be the media from one frame of the codec
-  representing 20 ms of audio.  This gets truncated into 29 bit number
-  of 14 bit number of 10s of ms depending on context.
+  representing 20 ms of audio.  This gets truncated into 28 bit number
+  of ms with 29 bit set to 1 
+  or a 14 bit number of 10s of ms depending on context. 
 
 - Fragment ID: media chunks can be broken into fragments identified by a
   Fragment ID. Each fragment needs to be small enough to send in a
   single UDP packet.  There is also a Last Fragment Flag to know the
-  number of Fragments.  This is a 6 bit number limiting the size of
+  number of Fragments.  This is a 7 bit number limiting the size of
   datagrams to a bit over 65K bytes.
 
-Full names are formatted as URLs like 
-```quicr://domain/resourceID/sourceID/mediaSeqID/FragID where:```
+Full names are formatted as URLs like:  
+```quicr://domain/resourceID/sourceID/mediaSeqID/FragID```
 
 - domain is a DNS name, 
 
@@ -221,7 +226,8 @@ received (or until bestBefore date exceeded).  The packet is added into
 the priority queue for retransmission after it is considered lost by the
 congestion control algorithm.
 
-The transport will encrypt the data being sent with a per sender
+The transport will encrypt and authenticate 
+the data being sent with a per sender
 symmetric key.
 
 Reliably packets are retransmitted based on getting information from the
@@ -240,7 +246,7 @@ connection.
 The downstream typically runs over same connection as the upstream once
 it is opened.  The subscribe must sent a Sub request for the named data
 it wants to receive.  The name can be truncated by missing the right
-most segments of the name in which case it will act as a wild car
+most segments of the name in which case it will act as a wild card
 subscription to all names that match the provided part of the name.  For
 example, in an web conferencing use case, the client may subscribe to
 just the origin and ResourceID to get all the media for a particular
@@ -255,9 +261,10 @@ priority queues for all subscriptions for this subscriber up the the
 maximum bitrate.  If the minimum bandwidth is not reached, additional
 packets that either have blank data or are retransmissions of other
 packets are send to get up to the minimum bandwidth.  This allows the
-Subscriber to probe for bandwidth available.  If an RTT estimate is
-needed to Relay, the upstream messages can be used to provide this.  The
-messages with data from the Relay to Subscriber contain the time there
+Subscriber to probe for the available bandwidth.  If an RTT estimate 
+to the Relay is
+needed, the upstream messages can be used to discover the RTT.  The
+Relay Pub messages with data from the Relay to Subscriber contain the time there
 were sent which, combined with changes in time that different packets
 were received, can be used to understand if queue delays is building it
 up or not.
@@ -299,7 +306,8 @@ connection.
 
 ## End to End Encryption
 
-The data transmitted is encrypted end to end with a symmetric key
+The data transmitted is encrypted and authenticated 
+end to end with a symmetric key
 provided out of band.  Each publisher has their own key which is
 distributed to all the subscribers. 
 
@@ -330,14 +338,14 @@ bandwidth to probe and see if the estimate is too low while during phase
 one it transmits at 75% of the estimated bandwidth to drain any queues
 delay that accumulated during phase zero.
 
-All the congestion controll is done by the client. In the upstream
+All the congestion control is done by the client. In the upstream
 direction from the client to relay, the relay Acks all the packets to
 provide the information the client needs to adjust sending rates. In the
 downstream direction, the client figures out what packets were received
-and computes a downstream sending reate that it sends to the Relay in a
+and computes a downstream sending rate that it sends to the Relay in a
 Rate message.
 
-Each packet sent bu the client is sent with a network sequence number
+Each packet sent by the client is sent with a network sequence number
 and is acknowledged by the relay in an Ack tag.
 The client keeps track of when the packet
 was sent, size of the packet, when the ack was received, and if the
@@ -412,7 +420,7 @@ nats and firewalls alice.
 
 # Client Reference Code Notes 
 
-Implemented as a chain of command patern where Packets containing the
+Implemented as a chain of command pattern where Packets containing the
 message to be sent and and received are passed up and down the chain of
 command in upstream and downstream directions. The elements in the chain
 are:
@@ -430,17 +438,20 @@ are:
 
 - FecPipe: Deals with forward error correct and redundant sending of packets
 
-- RetransmitPip3: Deals with retransmission of reliable packets 
+- RetransmitPipe: Deals with retransmission of reliable packets 
 
 - PriorityPipe: Deal with ordering of upstream packets and discarding
 old packets. Also does consolidation of multiple packets.
 
 - PacerPipe: Linked with congestion controller and decides when to send the
-  next packer.
+  next packet. Creates ClientSeqNum and deals with Acks. 
+  Puts things in and out of Retransmit Pipe. 
 
 - ConnectionPipe : Keeps track of state if connection is open or not 
 
-- CrazyBitPipe: Implements spin bit
+- CrazyBitPipe: Implements spin bit. Uses RTT Estimate 
+
+- FakeLossPipe: simulates network loss and rate limits 
 
 - UdpPipe: Bottom UDP layer that sends and receives the UDP level packets a
 
@@ -466,8 +477,11 @@ little endian format and not network byte order.
 EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
 
 
+Message ::= Header (Sync | SyncAck | Reset | Ack | Rate | Nack  | Sub  )
 
-Message ::= (Sync | SyncAck | Reset |  Ack | Rate | Nack | Data | Sub ) Header
+Message ::= Header Pub+ Nack* Rate?
+
+Message ::= Header RPub+ Ack* 
 
 Sync ::= tagSync origin senderID clientTime versionVec1
 
@@ -481,20 +495,21 @@ Rate ::= tagRate bitRate
 
 Nack := relaySeqNum 
 
-Data ::=   tagSqeNum seqNum ( EncryptDataBlock | DataBlock ) ShortName LIfeTime 
+Pub ::= tagClientSeqNum clientSeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
-Sub ::=
+RPub ::= tagRelaySeqNum relaySeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
+Sub ::= ShortName 
 
-ShortName ::= 
+ShortName ::= resourceID senderID sourceID mediaTime fragmentID
 
-LifteTime ::= varInt
+LifeTime ::= varInt
 
 EncryptDataBlock ::= tagEncData1 length authDataBytes dataBytes 
 
 DataBlock ::= tagData length dataBytes 
 
-Header ::= tagExtraMagic1 ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) 
+Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) tagExtraMagic1
 
 
 
@@ -650,7 +665,7 @@ TODO - replace with SubDataAck that has rate, and ack vectors to stop
 retransmissions
 
 
-## SubData
+## Relay Pub 
 
 Has relaySeqNum.
 
@@ -745,7 +760,8 @@ network close to clients may provide additional increase in QoE.
 
 ## Relay fail over 
 
-A relay that wants to shutdown and use the redirect to move traffic to a
+A relay that wants to shutdown and use the redirect message 
+to move traffic to a
 new relay
 
 If a relay has failed and restarted or been load balanced to a different
@@ -860,3 +876,14 @@ use that extension.
 
 Client should periodically (perhaps every 10 seconds) send stats to the 
 Relay. 
+
+#  Appendix Extension:  Redirect 
+
+Relay can send a message to client with address of new relay. Client 
+send a Syn to new relay along with all Subscriptions. After that is done
+the Client unsubscribes from old relay and closes connection to it. 
+
+This allows for make before break transfer from one relay to another so
+that no media is lost during transition. One of the uses of this is upgrade
+of the Relay software during operation. 
+
