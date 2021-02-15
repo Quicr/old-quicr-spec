@@ -1,4 +1,4 @@
-% QuicR Design 
+% QuicR Design
 % Cullen Jennings
 % Jan 2020
 
@@ -79,13 +79,13 @@ inject pub data or receive subscribes that trigger other backend logic.
 
 All significant discussion of development of this protocol is in the
 GitHub issue tracker at TODO. Goal to keep the base specification under
-20 pages. Implementors will need to look at the reference code for some
+20 pages. Implementers will need to look at the reference code for some
 of the encoding and implementation details.
 
 # Terminology
 
 - Relay - a server in the cloud that can receive subscriptions and send
-  data it receives in publish or other other endpoints that have
+  data it receives in publish to other endpoints that have
   subscribed to the data.
 
 - Publisher: An endpoint that sends data to a Relay.
@@ -101,10 +101,10 @@ of the encoding and implementation details.
 
 - Packet: A UDP message sent by the transport.
 
-- Data: Application level chunk of Data that has a unique Name, 
-  a limited lifetime, 
-  and is transported as a datagram by this protocol. 
-  
+- Data: Application level chunk of Data that has a unique Name,
+  a limited lifetime,
+  and is transported as a datagram by this protocol.
+
 
 # Problem Space
 
@@ -117,7 +117,7 @@ data is that it is not useful if it is takes longer than some fixed
 amount of time to deliver.  This transport protocol is designed for data
 with a lifetime in the hundredths of seconds to tens of second range.
 
-The client can be behind NATs and firewalls and will often be on a WiFI
+The client can be behind NATs and firewalls and will often be on a WIFI
 for cellular network. The Relays need to have a public IP address, or at
 least an IP address reachable by all the clients they server, but can be
 behind firewalls and load balancers.
@@ -152,8 +152,8 @@ Data names are formed by the concatenation of several parts:
   Example: A client that was sending media from a camera, a mic, and
   screen share might use a different sourceID for each one.  Must hash
   to unique 7 bit value within scope of origin/resource/sender scope.  A
-  scalable codec with multiple layers would probably use a a different
-  SourceID for each layer.
+  scalable codec with multiple layers would probably use a different
+  sourceID for each layer.
 
 - Media Time: Identifies an immutable chunk of media in a stream.
   Typically the TAI time in milliseconds when the last sample of the
@@ -161,8 +161,8 @@ Data names are formed by the concatenation of several parts:
   1990-12-31T23-59.601Z with leading zeros.  Example: For an audio
   stream, this could be the media from one frame of the codec
   representing 20 ms of audio.  This gets truncated into 28 bit number
-  of ms with 29 bit set to 1 
-  or a 14 bit number of 10s of ms depending on context. 
+  of ms with 29 bit set to 1
+  or a 14 bit number of 10s of ms depending on context.
 
 - Fragment ID: media chunks can be broken into fragments identified by a
   Fragment ID. Each fragment needs to be small enough to send in a
@@ -171,9 +171,10 @@ Data names are formed by the concatenation of several parts:
   datagrams to a bit over 65K bytes.
 
 Full names are formatted as URLs like:  
-```quicr://domain/resourceID/sourceID/mediaSeqID/FragID```
 
-- domain is a DNS name, 
+''' quicr://domain/resourceID/sourceID/mediaSeqID/FragID '''
+
+- domain is a DNS name,
 
 - and resource name, sender name, source names are a URL safe string, or
   base 10 numbers
@@ -184,8 +185,8 @@ Full names are formatted as URLs like:
   followed by L if it is the last fragment
 
 Short Names are a binary blobs formed from the full name using hash and
-omitting information that can be gained from context of the connection. 
- 
+omitting information that can be gained from context of the connection.
+
 
 TODO - is there a better decoding of both media time and best before
 when combined
@@ -201,10 +202,10 @@ using HTTP/Rest to talk to a web application that provides them.
 
 The client starts a connection by sending a Sync to the appropriate
 relay which responds with a SyncAck. This is done frequently during the
-connection to keep state in Sync. 
+connection to keep state in Sync.
 
 TODO nonce and how authentication works (relies on both relay and client
-have a token that was negotiated in some other protocol ) 
+have a token that was negotiated in some other protocol )
 
 
 # Upstream Design
@@ -226,7 +227,7 @@ received (or until bestBefore date exceeded).  The packet is added into
 the priority queue for retransmission after it is considered lost by the
 congestion control algorithm.
 
-The transport will encrypt and authenticate 
+The transport will encrypt and authenticate
 the data being sent with a per sender
 symmetric key.
 
@@ -257,11 +258,11 @@ what packets it is successful receiving then telling the Relay what rate
 to send at.  This is done by sending a Rate message at least once ever
 phase to the relay.  The Rate message contains both a minimum bandwidth
 to use as well as maximum.  The relay sends the packets from the
-priority queues for all subscriptions for this subscriber up the the
+priority queues for all subscriptions for this subscriber up the
 maximum bitrate.  If the minimum bandwidth is not reached, additional
 packets that either have blank data or are retransmissions of other
 packets are send to get up to the minimum bandwidth.  This allows the
-Subscriber to probe for the available bandwidth.  If an RTT estimate 
+Subscriber to probe for the available bandwidth.  If an RTT estimate
 to the Relay is
 needed, the upstream messages can be used to discover the RTT.  The
 Relay Pub messages with data from the Relay to Subscriber contain the time there
@@ -292,7 +293,7 @@ a need to understand what applications are using them.
 QuicR needs to stop attacks where a the attacker spoofed a victims IP
 address and then causes the relay to forward unwanted traffic to the
 victim.  When a client first connects to a relay, it goes through an
-auth step to stop this.  The client sends an Sync message to the relay
+authentication step to stop this.  The client sends an Sync message to the relay
 that contains an authorization generated from a nonce, the relay replies
 with a SyncOK if the authorization is OK or a SyncNOK with a new nonce
 if the authorization was not OK.
@@ -306,10 +307,10 @@ connection.
 
 ## End to End Encryption
 
-The data transmitted is encrypted and authenticated 
+The data transmitted is encrypted and authenticated
 end to end with a symmetric key
 provided out of band.  Each publisher has their own key which is
-distributed to all the subscribers. 
+distributed to all the subscribers.
 
 ## Firewall Traversal
 
@@ -318,7 +319,7 @@ firewall can track them an only allow flows if there is a successful
 Sync/SyncOK handshake from then inside of the firewall. The
 Sync/SyncNOK/SyncOK can be rate limited.
 
-## Fronting 
+## Fronting
 
 A given origin relay may actually simply be fronting other relays behind
 it and effectively doing a NAT style name translation of the
@@ -408,7 +409,7 @@ and marks that in the ECN congested state.
 
 TODO - work out priority levels needed.  Audio layers for baseline and
 wideband and redundant encodings.  video need low res , high res,
-iframes, other, FEC. Input, critical.  low priority background data for
+ I frames, other, FEC. Input, critical.  low priority background data for
 time warp look ahead etc.
 
 TODO - have the priority map to DSCP and how that maps to WIFI
@@ -416,19 +417,19 @@ TODO - have the priority map to DSCP and how that maps to WIFI
 # Keep Alive
 
 Client sends Sync frequently and relay responds with SyncAck to keep
-nats and firewalls alice.
+NATs and firewalls alive.
 
-# Client Reference Code Notes 
+# Client Reference Code Notes
 
 Implemented as a chain of command pattern where Packets containing the
-message to be sent and and received are passed up and down the chain of
+message to be sent and received are passed up and down the chain of
 command in upstream and downstream directions. The elements in the chain
 are:
 
 - QuicR Application APi: provides API at top of chain for the
   application
 
-- EncryptPipe: Encrypt , Decrypt, Authenticate data 
+- EncryptPipe: Encrypt , Decrypt, Authenticate data
 
 - FragmentPipe: Fragments downstream packets to 1200 bytes and reassembles
   and de duplicates upstream packets
@@ -438,20 +439,20 @@ are:
 
 - FecPipe: Deals with forward error correct and redundant sending of packets
 
-- RetransmitPipe: Deals with retransmission of reliable packets 
+- RetransmitPipe: Deals with retransmission of reliable packets
 
 - PriorityPipe: Deal with ordering of upstream packets and discarding
 old packets. Also does consolidation of multiple packets.
 
 - PacerPipe: Linked with congestion controller and decides when to send the
-  next packet. Creates ClientSeqNum and deals with Acks. 
-  Puts things in and out of Retransmit Pipe. 
+  next packet. Creates ClientSeqNum and deals with Acks.
+  Puts things in and out of Retransmit Pipe.
 
-- ConnectionPipe : Keeps track of state if connection is open or not 
+- ConnectionPipe : Keeps track of state if connection is open or not
 
-- CrazyBitPipe: Implements spin bit. Uses RTT Estimate 
+- CrazyBitPipe: Implements spin bit. Uses RTT Estimate
 
-- FakeLossPipe: simulates network loss and rate limits 
+- FakeLossPipe: simulates network loss and rate limits
 
 - UdpPipe: Bottom UDP layer that sends and receives the UDP level packets a
 
@@ -481,33 +482,33 @@ Message ::= Header (Sync | SyncAck | Reset | Ack | Rate | Nack  | Sub  )
 
 Message ::= Header Pub+ Nack* Rate?
 
-Message ::= Header RPub+ Ack* 
+Message ::= Header RPub+ Ack*
 
 Sync ::= tagSync origin senderID clientTime versionVec1
 
 SyncAck ::= tagSyncAck ok
 
-Reset ::= tagReset 
+Reset ::= tagReset
 
-Ack ::= tagAck recvTime seqNum ackVec ecnVec 
+Ack ::= tagAck recvTime seqNum ackVec ecnVec
 
 Rate ::= tagRate bitRate
 
-Nack := relaySeqNum 
+Nack := relaySeqNum
 
 Pub ::= tagClientSeqNum clientSeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
 RelayPub ::= tagRelaySeqNum relaySeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
-Sub ::= ShortName 
+Sub ::= ShortName
 
 ShortName ::= resourceID senderID sourceID mediaTime fragmentID
 
 LifeTime ::= varInt
 
-EncryptDataBlock ::= tagEncData1 length authDataBytes dataBytes 
+EncryptDataBlock ::= tagEncData1 length authDataBytes dataBytes
 
-DataBlock ::= tagData length dataBytes 
+DataBlock ::= tagData length dataBytes
 
 Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) tagExtraMagic1
 
@@ -522,7 +523,7 @@ senderID ::= varInt
 
 clientTime ::= varInt
 
-versionVec1 ::= varInt 
+versionVec1 ::= varInt
 
 varInt ::= Int7 | Int14 | Int29 | Int60
 
@@ -543,7 +544,7 @@ bit number combined with 7th bit as the last flag.
 
 ## Tags
 
-TODO - explain this is basic extensibility model 
+TODO - explain this is basic extensibility model
 
 In general Tags consist of a tag value, length of data, and data.  If
 the length of the data is always the same for the tag, the length is
@@ -562,16 +563,16 @@ draft-aboba-avtcore-quic-multiplexing
 
 First byte of packet is a magic number that has 2 bits to indicate if it
 is an Sync, SyncAck, Reset or SynNOK, Data so that firewalls can use
-that and one bit used for a spin bit. 
+that and one bit used for a spin bit.
 
 ## Sync, SyncAck
 
 Sync has senderID , auth, origin DNS name,
 
- 
-Has default resourceID , senderID, relaySenderID , and souceID. 
 
-Sync has relay Seq Num, user extension vector 
+Has default resourceID , senderID, relaySenderID , and souceID.
+
+Sync has relay Seq Num, user extension vector
 
 has extra 64 bit magic to make sure firewalls can detect
 
@@ -582,15 +583,15 @@ authenticated by TODO. SyncOK/NOK authenticated with client nonce.
 Firewalls can recognize from header by TODO. SyncAck has initial
 upstream and downstream bitrate estimate for client to use.
 
-rate limit to TODO kbps per unique UDP 5-tuple flow 
+rate limit to TODO kbps per unique UDP 5-tuple flow
 
 Sync has supported  version version vector or extensions support.
 
-SyncAck has user version vector 
+SyncAck has user version vector
 
-Sent 1 per second to allow for stateless failover of relays. 
+Sent 1 per second to allow for stateless failover of relays.
 
-must be authenticated 
+must be authenticated
 
 Authentication designed to be allow on path attacker to see the auth so
 that an onpath relay can insert itself into the flow.
@@ -602,7 +603,7 @@ Authenticated by TODO. Firewalls can recognize from header by TODO
 
 Auth with path secret ?
 
-has option redirect address 
+has option redirect address
 
 must be authenticated
 
@@ -613,7 +614,7 @@ firewalls clean up state )
 
 Sent by relay or load balancer to send traffic to different relay.
 
-Treat like reset for firewalls, 
+Treat like reset for firewalls,
 Auth with path secret ?
 
 Contains new relay ip4 or 6 address, port.
@@ -621,7 +622,7 @@ Does not change origin, is like got a new IP in DNS A record.
 
 ## Ping, PingAck
 
-TODO - move extension 
+TODO - move extension
 
 Has net sequence number
 
@@ -637,7 +638,7 @@ Has net sequence number
 
 Has compressed short name
 
-Has bestBefore date 
+Has bestBefore date
 
 Has data.
 
@@ -665,7 +666,7 @@ TODO - replace with SubDataAck that has rate, and ack vectors to stop
 retransmissions
 
 
-## Relay Pub 
+## Relay Pub
 
 Has relaySeqNum.
 
@@ -700,7 +701,7 @@ provided by a cloud oracle.
 
 Data is encrypted
 
-Data + short Name  (not compressed ) is authenticated 
+Data + short Name  (not compressed ) is authenticated
 
 For each senderID, applications provides a 96 bit salt + 128 or 256 bit
 key , and an auth tag length of 0, 64, 96, or 128 bit.
@@ -708,7 +709,7 @@ key , and an auth tag length of 0, 64, 96, or 128 bit.
 keys should not be used for more than 12 hours and must not be used for
 encryption more than TODO times.
 
-When rekeying, the key needs new salt and new senderID 
+When rekeying, the key needs new salt and new senderID
 
 
 # NATs, Firewalls, Load balancers
@@ -730,14 +731,14 @@ sticky to the relay the Sync was sent to.
 # 0-RTT
 
 The Syn, Pub, and Sub can call be sent  overlapped at the same time to
-get a zero round trip time startup. 
+get a zero round trip time startup.
 
 
-# Relays 
+# Relays
 
 ## Relay Chaining
 
-TODO - add concept root relay 
+TODO - add concept root relay
 
 Clients may be configured to connect to a local relay which then does a
 Pub/Sub for the appropriate data towards the origin in the named of data
@@ -758,9 +759,9 @@ traditional CDNs using Dash or HLS.  Moving these relays into the 5G
 network close to clients may provide additional increase in QoE.
 
 
-## Relay fail over 
+## Relay fail over
 
-A relay that wants to shutdown and use the redirect message 
+A relay that wants to shutdown and use the redirect message
 to move traffic to a
 new relay
 
@@ -798,13 +799,13 @@ Thanks to TODO for review and contributions.
 
 # TODO Things
 
-Change media sequence number to media time 
+Change media sequence number to media time
 
 How does reliably retransmission work in downstream direction
 
-TODO - when fragmenting, make equal size fragments 
+TODO - when fragmenting, make equal size fragments
 
-TODO - get rid of short name concept 
+TODO - get rid of short name concept
 
 TODO - document layouts:
 
@@ -812,7 +813,7 @@ TODO - document layouts:
 
 - Extensions (spin, time set, )
 
-- Usage examples webex, youtube, twitter, slack, IoT, Gaming 
+- Usage examples webex, youtube, twitter, slack, IoT, Gaming
 
 # TODO move - Real Time Applications
 
@@ -820,68 +821,68 @@ A key characteristics of real time internet applications is they:
 
 1. have a strict time budget after which the information is no longer
 useful,
-   
+
 2. run in network conditions where at some points in time there is not
 enough bandwidth to send everything they wish.
-   
+
 To achieve this, the transport need to make a tradeoff between
 throughput, delay, and loss.  The transports trade off theses three
 aspects to maximize some users experience such as a video call or game
 play. This is a very different problem than a traditional transport like
 TCP trying to maximize average throughput.
 
-Figure triangle , Throughput, delay, loss 
+Figure triangle , Throughput, delay, loss
 
 
 
 
-# Appendix Extension: Consolidation 
+# Appendix Extension: Consolidation
 
-Allow mergo of packets, prefer constant packrate in defined packet tranmission 
-internal. 
+Allow merge of packets, prefer constant packet rate in defined packet transmission
+internal.
 
-TODO - move to be in the priority Q 
+TODO - move to be in the priority Q
 
 
-# Appendix Extension:  Version Negotiation and Extensibility 
+# Appendix Extension:  Version Negotiation and Extensibility
 
-The two main concepts for extensibility is a negotiate feature vector 
-and tags. Each new feature, including non backwards compatible version 
-of the protocol are given a features number. The client and relay use a 
-bit vector with bits sets for support or used features to negotiation 
-which features to use.  The other concepts is that information is 
-encoded in Tag, Length, value tuples so that an implementation that does 
-not support a given tag, knows if the tag is mandatory to understand and 
-the length of it so that the parse can skip over tag, length, value 
-tuples (often call just tags) that it does not undertand. 
+The two main concepts for extensibility is a negotiate feature vector
+and tags. Each new feature, including non backwards compatible version
+of the protocol are given a features number. The client and relay use a
+bit vector with bits sets for support or used features to negotiation
+which features to use.  The other concepts is that information is
+encoded in Tag, Length, value tuples so that an implementation that does
+not support a given tag, knows if the tag is mandatory to understand and
+the length of it so that the parse can skip over tag, length, value
+tuples (often call just tags) that it does not understand.
 
-Tags that have a fixed length, do not encode the tag on the wire.  All 
-tags are published in machine readable form on GitHub and the assumption 
-is that implementations that need interoperability will be able to parse 
-all tags in the table within 18 weeks of the tag being added to the 
-table. This does not mean the implementations have implemented the tag, 
-but just that the parser is updated to recognizes the tag and be able to 
-skip over the tag. Short tags are tags that are a 7 bit number and are 
-reserved for allocation to tags that are both frequently and widely used 
-that need the reduced bandwith. Normal tags are out of a 14 bit space 
-and are allocated on first come first serve basis. 
+Tags that have a fixed length, do not encode the tag on the wire.  All
+tags are published in machine readable form on GitHub and the assumption
+is that implementations that need interoperability will be able to parse
+all tags in the table within 18 weeks of the tag being added to the
+table. This does not mean the implementations have implemented the tag,
+but just that the parser is updated to recognizes the tag and be able to
+skip over the tag. Short tags are tags that are a 7 bit number and are
+reserved for allocation to tags that are both frequently and widely used
+that need the reduced bandwidth. Normal tags are out of a 14 bit space
+and are allocated on first come first serve basis.
 
-Extension can be allocated a extension number. The Sync packet has an 
-supported extension bit vector where the n'th bit it set if the the 
-client supports extension number n. The SyncAck contains an use 
-extension bit vector where the n'th bit indicates that the client should 
-use that extension. 
+Extension can be allocated a extension number. The Sync packet has an
+supported extension bit vector where the n'th bit it set if the
+client supports extension number n. The SyncAck contains an use
+extension bit vector where the n'th bit indicates that the client should
+use that extension.
 
-#  Appendix Extension:  Stats 
+#  Appendix Extension:  Stats
 
-Client should periodically (perhaps every 10 seconds) send stats to the 
-Relay. 
+Client should periodically (perhaps every 10 seconds) send stats to the
+Relay.
 
-#  Appendix Extension:  Redirect 
+#  Appendix Extension:  Redirect
 
-Relay can send a message to client with address of new relay. Client 
-send a Syn to new relay along with all Subscriptions. After that is done
-the Client unsubscribes from old relay and closes connection to it. 
+Relay can send a message to client with address of new relay. Client
+send a Sync to new relay along with all Subscriptions. After that is done
+the Client unsubscribes from old relay and closes connection to it.
 
 This allows for make before break transfer from one relay to another so
 that no media is lost during transition. One of the uses of this is upgrade
