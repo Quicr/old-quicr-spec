@@ -497,7 +497,7 @@ Nack := relaySeqNum
 
 Pub ::= tagClientSeqNum clientSeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
-RPub ::= tagRelaySeqNum relaySeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
+RelayPub ::= tagRelaySeqNum relaySeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
 
 Sub ::= ShortName 
 
@@ -886,4 +886,34 @@ the Client unsubscribes from old relay and closes connection to it.
 This allows for make before break transfer from one relay to another so
 that no media is lost during transition. One of the uses of this is upgrade
 of the Relay software during operation. 
+
+# TODO 
+
+Assume codecs are safe. Send auth tag 1 per second and rest of media no auth
+
+Packet rates 
+     ppp   delay  maxRate    minRate
+ 960 pps =  1ms = 9.2 mbps  = 384 kbps
+ 240 pps =  4ms = 2.3 mbps  =  96 kbps
+  60 pps = 17ms = 0.6 mbps  =  24 kbps
+  15 pps = 67ms = 144 kbps  =   6 kbps
+
+Constant packet rate helps deal with burst loss 
+1000 pps =   1 ms = 9.6 mbps  = 400 kbps 
+ 500 pps =   2 ms = 4.8 mbps  = 200 kbps 
+ 300 pps =   3 ms = 2.9 mbps  = 120 kbps
+ 100 pps =  10 ms = 960 kbps  =  40 kbps
+  50 pps =  20 ms = 480 kbps  =  20 kbps 
+  30 pps =  33 ms = 288 kbps  =  12 kbps
+  10 pps = 100 ms =  96 kbps  =   4 kbps
+
+
+
+TODO - congestion control
+
+UWW - Use what works 
+
+vary bandwidth, packet rate, and DSCP 
+
+TODO - so because all seq num not authed, attacker can fuck with timing of things and DDoS flow 
 
