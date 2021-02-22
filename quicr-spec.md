@@ -570,7 +570,8 @@ that and one bit used for a spin bit.
 Sync has senderID , auth, origin DNS name,
 
 
-Has default resourceID , senderID, relaySenderID , and souceID.
+Later we will add default resourceID , senderID, relaySenderID , and souceID 
+so theses can be compressed out of other messages.
 
 Sync has relay Seq Num, user extension vector
 
@@ -589,13 +590,14 @@ Sync has supported  version version vector or extensions support.
 
 SyncAck has user version vector
 
-Sent 1 per second to allow for stateless failover of relays.
+Sent 1 per second to allow for stateless fail over of relays.
 
 must be authenticated
 
 Authentication designed to be allow on path attacker to see the auth so
-that an onpath relay can insert itself into the flow.
+that an on path relay can insert itself into the flow.
 
+Do we want allow server to cause proof of aliveness for DDoS mitigation 
 
 ## Reset
 
