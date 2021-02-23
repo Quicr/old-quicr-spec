@@ -517,46 +517,54 @@ little endian format and not network byte order.
 EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
 
 
-Message ::= (Sync | SyncAck | Reset  | Sub  )  Header
+Message  ::= pathToken ( Sync | SyncAck | Reset | Sub | ClientData Pub+ | Nack | Rate | Ack | RelayData SubData+ ) Header
 
-Message ::= Nack? Rate?  ( ClientSeqNum Pub+ )? Header
+Sync ::= tagSync  cookie origin senderID clientTime supportedFeatureVec
 
-Message ::=  Ack?  ( RelaySeqNum SubData+ )? Header
-
-
-Sync ::= tagSync origin defaultSenderID defaultRelaySenderID defaultResorceID pathToken clientTime cliemtSeqNum versionVec1
-
-SyncAck ::= tagSyncAck pathToken relaySeqNum versionVecUse1 
-
-Reset ::= tagReset pathToken 
-
-Ack ::= tagAck recvTime clientSeqNum ackVec ecnVec
-
-Rate ::= tagRate bitRate
-
-Nack ::= tagNack relaySeqNum
-
-Sub ::= tagSub ShortName
-
-ClientSeqNum ::=  tagClientSeqNum clientSeqNum
-
-RelaySeqNum ::=  tagRelaySeqNum relaySeqNum
-
-Pub ::= tagEncyptedDataFragment1 lifeTime ShortName EncDataBlock1
-
-SubData ::= tagEncyptedDataFragment1 lifeTime ShortName EncDataBlock1
+SyncAck ::= tagSyncAck  serverTime useFeatureVec 
 
 
-Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) tagExtraMagic1?
+Reset ::= tagReset 
+
+Reset ::= tagResetRedirect  cookie originLen orginStringBytes port 
+
+Reset ::= tagResetRetry  cookie
 
 
-EncDataBlock1 ::=  dataBytesLen authTagLen authTagDataBytes  dataBytes
+
+Ack ::= tagAck  recvTime clientSeqNum ackVec ecnVec
+
+Rate ::= tagRate   bitRate
+
+Nack ::= tagNack   relaySeqNum
+
+Sub ::= tagSub  ShortName
+
+
+
+
+ClientData ::=  tagClientData clientSeqNum
+
+RelayData ::=  tagRelayData relaySeqNum
+
+Pub ::= tagPubData ShortName lifeTime  EncDataBlock1
+
+SubData ::= tagSubData ShortName lifeTime EncDataBlock1
+
+
+Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeRes|
+tagPacketTypeData
+ tagPacketTypeSynCrazy | tagPacketTypSynAckCrazy | tagPacketTypeResCrazy
+ |
+ tagPacketTypeDataCrazy  )
+
+
+EncDataBlock1 ::=  authTagLen dataAndTagTotalLen cipherTextAndTagData
 
 DataBlock ::= dataLen dataBytes
 
-ShortName ::= tagShortName1 resourceID senderID sourceID mediaTime fragmentID 
-ShortName ::= tagShortName2 senderID  mediaTimeTrunc 
-ShortName ::= tagShortName3 mediaTimeTunc
+ShortName ::= tagShortName1 resourceID senderID sourceID mediaTime fragmentID
+
 
 lifeTime ::=  varInt
 
