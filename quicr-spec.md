@@ -1,6 +1,6 @@
 % QuicR Design
 % Cullen Jennings
-% Jan 2020
+% Feb 2021
 
 # QuicR - Quick Real-time Data Transport
 
