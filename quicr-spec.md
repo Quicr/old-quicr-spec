@@ -585,26 +585,28 @@ bits from 8 bit number.
 ## Names
 
 Only short names are sent over wire. The Origin is not sent and MUST be
-same as what was sent in the Sync.  Any resource or source that match the default setup in
-the Sync are omitted. 
+same as what was sent in the Sync.  Any resource or source that match
+the default setup in the Sync are omitted.
 
 ## Tags
 
 
 In general Tags consist of a tag value, length of data, and data.  If
 the length of the data is always the same for the tag, the length is
-omitted.  The tag values are 14 bit integers and encoded as a variable length integer.
+omitted.
+The tag values are 14 bit integers and encoded as a variable length
+integer.
 
 TODO - add ref to tag definitions file
 
-When a tag is defined, it gets a short (less than 127) or long tag number, length of
-value, and flag if it is mandatory to understand.
+When a tag is defined, it gets a short (less than 127) or long tag
+number, length of value, and flag if it is mandatory to understand.
 
 
 ## Header
 
-First byte in range 16-19 so it can multiplex with WebRTC. Or with spin bit could use 80 to 88. - see
-draft-aboba-avtcore-quic-multiplexing
+First byte in range 16-19 so it can multiplex with WebRTC. Or with spin
+bit could use 80 to 88. - see draft-aboba-avtcore-quic-multiplexing
 
 First byte of packet is a magic number that has 2 bits to indicate if it
 is an Sync, SyncAck, Reset, or Data so that firewalls can use
@@ -771,8 +773,8 @@ tag = truncate( fullTag, tagLen )
 
 Output: cipherText, authTag 
 
-Note: one16bit is a 16 bit integer of value 1. This allows for 2^16 uses of AES128 with that IV which gives 1 MB of
-data for the chunk.
+Note: one16bit is a 16 bit integer of value 1. This allows for 2^16 uses
+of AES128 with that IV which gives 1 MB of data for the chunk.
 
 Note: HKDR basicly turns in into HMAC. HMAC turns into two SHA. 
 
@@ -888,8 +890,8 @@ Figure triangle , Throughput, delay, loss
 
 # Appendix Extension: Consolidation
 
-Allow merge of packets, prefer constant packet rate in defined packet transmission
-internal.
+Allow merge of packets, prefer constant packet rate in defined packet
+transmission internal.
 
 TODO - move to be in the priority Q
 
@@ -940,7 +942,8 @@ of the Relay software during operation.
 
 # TODO 
 
-Assume codecs are safe. Send auth tag 1 per second and rest of media no auth
+Assume codecs are safe. Send auth tag 1 per second and rest of media no
+auth
 
 Packet rates 
      ppp   delay  maxRate    minRate
@@ -966,7 +969,8 @@ UWW - Use what works
 
 vary bandwidth, packet rate, and DSCP 
 
-TODO - so because all seq num not authed, attacker can fuck with timing of things and DDoS flow 
+TODO - so because all seq num not authed, attacker can fuck with timing
+of things and DDoS flow
 
 # Open Issue
 
