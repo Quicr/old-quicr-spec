@@ -1,6 +1,6 @@
 % QuicR Design
 % Cullen Jennings
-% Jan 2020
+% Feb 2021
 
 # QuicR - Quick Real-time Data Transport
 
@@ -51,11 +51,11 @@ transports.
 
 In the simple case, an web application could have a single relay in the
 cloud that forwarded packets between users in a video conference.  The
-cloud could also have multiple relays.  
+cloud could also have multiple relays.
 QuicR is designed to make it
 easy to implement stateless relays so that fail over could happen
 between relays with minimal impact to the clients and relays can redirect
-a client to a different relay.  
+a client to a different relay.
 It is also designed
 to allow high speed forwarding with ASICs, or NIC cards with on card
 processing, or use intel DPDK. Relay can also be chained so that a relay
@@ -74,6 +74,7 @@ optimized to provide the highest average throughput of data.
 
 TODO - talk about a relay can also be directly connected to a backend to
 inject pub data or receive subscribes that trigger other backend logic.
+
 
 # Contributing
 
@@ -136,43 +137,48 @@ Data names are formed by the concatenation of several parts:
 
 - Origin: This is like a HTTP origin and uniquely identifiers the
   application and a root relay. This is a DNS domain name or IP
-  address. MUST hash to unique 29 bit value within the relays that serve
-  it.  Example: webex.com
+  address combined with a UDP port number.
+  Example: sfu.webex.com:5004
 
-- Resource Name: A identifier for the context of a single group session.
-  MUST hash to unique 29 bit value within Origin scope.  This is a
-  string with characters out of URL unreserved character set in
-  RFC3986. Much like HTTP a resource.  Example: conferences number
+- ResourceID: A identifier for the context of a single group session.
+ Is unique withthing scope of Origin.   The is a variable length encoded
+ 40 bit integer.   Example: conferences number
 
-- Sender Name: Identifies a single endpoint client within that Resource
-  that publishes data.  MUST hash to unique 29 bit value within
-  Origin/Resource scope.  Example: fluffy_gmail_com
-
-- Source Name: Identifies a stream of media or content from that Sender.
+- SenderID: Identifies a single endpoint client within that ResourceID
+   that publishes data.
+   The is a variable length encoded 30 bit integer.
+   Example: Unique ID for
+  user logged into the origin application.
+ 
+- SourceID: Identifies a stream of media or content from that Sender.
   Example: A client that was sending media from a camera, a mic, and
-  screen share might use a different sourceID for each one.  Must hash
-  to unique 7 bit value within scope of origin/resource/sender scope.  A
+  screen share might use a different sourceID for each one.  A
   scalable codec with multiple layers would probably use a different
   sourceID for each layer.
+  The is a variable length encoded 14 bit integer. 
 
-- Media Time: Identifies an immutable chunk of media in a stream.
-  Typically the TAI time in milliseconds when the last sample of the
-  media was recorded.  When using a TAI time, should be formatted as
-  1990-12-31T23-59.601Z with leading zeros.  Example: For an audio
+- MediaTime: Identifies an immutable chunk of media in a stream.
+  The TAI (International Atomic Time) time in milliseconds after the
+  unix epoch when the last sample of the
+  chunk of media  was recorded.
+  When formatted as a string, it should be formatted as
+  1990-12-31T23-59.601Z with leading zeros.
+  The is a variable length encoded 44 bit integer. 
+  Example: For an audio
   stream, this could be the media from one frame of the codec
-  representing 20 ms of audio.  This gets truncated into 28 bit number
-  of ms with 29 bit set to 1
-  or a 14 bit number of 10s of ms depending on context.
+  representing 20 ms of audio. 
 
 - Fragment ID: media chunks can be broken into fragments identified by a
   Fragment ID. Each fragment needs to be small enough to send in a
-  single UDP packet.  There is also a Last Fragment Flag to know the
-  number of Fragments.  This is a 7 bit number limiting the size of
-  datagrams to a bit over 65K bytes.
+  single UDP packet.  The low order bit is also a Last Fragment Flag to know the
+  number of Fragments. The upper bits are used as a fragment counter
+  with the frist fragment starting at 1. 
+  The is a variable length encoded 13 bit integer.
+  
 
 Full names are formatted as URLs like:  
 
-''' quicr://domain/resourceID/sourceID/mediaSeqID/FragID '''
+''' quicr://domain:port/ResourceID/SenderID/SourceID/MediaTime/FragID '''
 
 - domain is a DNS name,
 
@@ -184,8 +190,13 @@ Full names are formatted as URLs like:
 - Fragment ID is not there if not fragmented or is base 10 number
   followed by L if it is the last fragment
 
-Short Names are a binary blobs formed from the full name using hash and
-omitting information that can be gained from context of the connection.
+ShortNames are formed from the cominaton fo the ResrouceID,
+SenderID, SourceID, MediaTime and FragmentID. Note the Origin is not in
+the short name and is assumed from the context in which the ShortName is
+used. 
+
+Truncated MediaTimes can be formed for MediaTimes that are a multiple of
+10 by deviding by 10 then truncating to the lower order 7 bits.
 
 
 TODO - is there a better decoding of both media time and best before
@@ -193,7 +204,12 @@ when combined
 
 
 
-# Connection Open
+# Connection Layer
+
+QuicR uses a model to set up a connection from the Client to the Relay
+that from a firewall point of view is very simular to a TCP setup with
+Syn, SynACK, and Rst. It does not look like TCP on the wire but it tries
+to have the same security properits for seesion tracking as TCP. 
 
 Before a connection can be started, the client needs values such as:
 Resource origin and name, SenderID, authentication nonce, and crypto
@@ -204,8 +220,18 @@ The client starts a connection by sending a Sync to the appropriate
 relay which responds with a SyncAck. This is done frequently during the
 connection to keep state in Sync.
 
-TODO nonce and how authentication works (relies on both relay and client
-have a token that was negotiated in some other protocol )
+The Sync contains the Origin for the sesion so that the relay has the
+context for using ShortNames and an intermediate relay could forward
+towards the root relay.
+
+The Sync conatins a PathToken that is an identifier that on path network
+elements and replay will see and can be used to in later messags to help
+reject messages from off path attackers.
+
+The Sync has a client sequence number for messages and the SynAck
+provides the relay sequence number for messages.
+
+
 
 
 # Upstream Design
@@ -328,6 +354,14 @@ privacy of what participants are communicating.
 
 # Congestion
 
+Two basic principles:
+
+1. Use it or loose it
+
+2. Use what works
+
+
+
 The congestion control is based on dividing time up into phases that are
 1/30th of a second long. This time is select as it is long enough to
 provide a reasonable bandwidth estimate but short enough to be near the
@@ -407,6 +441,9 @@ and marks that in the ECN congested state.
 
 # Priority
 
+Each chunk o named data is assinged a priority by the applicaitons and
+packets are send in strict prioriyt order.
+
 TODO - work out priority levels needed.  Audio layers for baseline and
 wideband and redundant encodings.  video need low res , high res,
  I frames, other, FEC. Input, critical.  low priority background data for
@@ -428,6 +465,8 @@ are:
 
 - QuicR Application APi: provides API at top of chain for the
   application
+
+- StatsPipe: Keep track of metrics
 
 - EncryptPipe: Encrypt , Decrypt, Authenticate data
 
@@ -460,7 +499,7 @@ Other key parts include the:
 
 - Encode: Takes care of encoding and decoding all parts of packet s
 
-- qrcc1: Implements a QuicR Congestion Control v1 congestion controller
+- RateCtrl: Implements a QuicR Congestion Control v1 congestion controller
 
 # Encoding
 
@@ -478,42 +517,48 @@ little endian format and not network byte order.
 EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
 
 
-Message ::= Header (Sync | SyncAck | Reset | Ack | Rate | Nack  | Sub  )
+Message ::= (Sync | SyncAck | Reset  | Sub  )  Header
 
-Message ::= Header Pub+ Nack* Rate?
+Message ::= Nack? Rate?  ( ClientSeqNum Pub+ )? Header
 
-Message ::= Header RPub+ Ack*
+Message ::=  Ack?  ( RelaySeqNum SubData+ )? Header
 
-Sync ::= tagSync origin senderID clientTime versionVec1
 
-SyncAck ::= tagSyncAck ok
+Sync ::= tagSync origin defaultSenderID defaultRelaySenderID defaultResorceID pathToken clientTime cliemtSeqNum versionVec1
 
-Reset ::= tagReset
+SyncAck ::= tagSyncAck pathToken relaySeqNum versionVecUse1 
 
-Ack ::= tagAck recvTime seqNum ackVec ecnVec
+Reset ::= tagReset pathToken 
+
+Ack ::= tagAck recvTime clientSeqNum ackVec ecnVec
 
 Rate ::= tagRate bitRate
 
-Nack := relaySeqNum
+Nack ::= tagNack relaySeqNum
 
-Pub ::= tagClientSeqNum clientSeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
+Sub ::= tagSub ShortName
 
-RelayPub ::= tagRelaySeqNum relaySeqNum ( EncryptDataBlock | DataBlock ) LifeTime ShortName
+ClientSeqNum ::=  tagClientSeqNum clientSeqNum
 
-Sub ::= ShortName
+RelaySeqNum ::=  tagRelaySeqNum relaySeqNum
 
-ShortName ::= resourceID senderID sourceID mediaTime fragmentID
+Pub ::= tagEncyptedDataFragment1 lifeTime ShortName EncDataBlock1
 
-LifeTime ::= varInt
-
-EncryptDataBlock ::= tagEncData1 length authDataBytes dataBytes
-
-DataBlock ::= tagData length dataBytes
-
-Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) tagExtraMagic1
+SubData ::= tagEncyptedDataFragment1 lifeTime ShortName EncDataBlock1
 
 
+Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeReset | ragPacketTypeData ) tagExtraMagic1?
 
+
+EncDataBlock1 ::=  dataBytesLen authTagLen authTagDataBytes  dataBytes
+
+DataBlock ::= dataLen dataBytes
+
+ShortName ::= tagShortName1 resourceID senderID sourceID mediaTime fragmentID 
+ShortName ::= tagShortName2 senderID  mediaTimeTrunc 
+ShortName ::= tagShortName3 mediaTimeTunc
+
+lifeTime ::=  varInt
 
 bitRate ::= varInt
 
@@ -527,55 +572,56 @@ versionVec1 ::= varInt
 
 varInt ::= Int7 | Int14 | Int29 | Int60
 
+
 ## Variable length integer
 
 The higher order bits indicate if the number is 1,2,4, or 8 bytes long;
 If the high order bit are 0, 10, 110 or 111 the integer is 7, 14, 29 or
 61 bits long respectively.
 
+Design choice: loosing 3 bits from 64 bit number is better than loosing 2
+bits from 8 bit number. 
+
 ## Names
 
 Only short names are sent over wire. The Origin is not sent and MUST be
-same as Sync.  Any resource or source that match the default setup in
-the Sync are omitted.  Media times are truncated to 14 number of 10s of
-ms or 26 bits number or sent as 61 bit numbers based on what application
-needs.  The fragmentation is omitted it not fragmented is sent as a 6
-bit number combined with 7th bit as the last flag.
+same as what was sent in the Sync.  Any resource or source that match
+the default setup in the Sync are omitted.
 
 ## Tags
 
-TODO - explain this is basic extensibility model
 
 In general Tags consist of a tag value, length of data, and data.  If
 the length of the data is always the same for the tag, the length is
-omitted.  The tag values are encoded as variable length integer.
+omitted.
+The tag values are 14 bit integers and encoded as a variable length
+integer.
 
 TODO - add ref to tag definitions file
 
-When a tag is defined, it gets a short or long tag number, length of
-value, and flag if it is mandatory to understand.
+When a tag is defined, it gets a short (less than 127) or long tag
+number, length of value, and flag if it is mandatory to understand.
 
 
 ## Header
 
-First byte in range 16-19 so it can multiplex with WebRTC. Or with spin bit could use 80 to 88. - see
-draft-aboba-avtcore-quic-multiplexing
+First byte in range 16-19 so it can multiplex with WebRTC. Or with spin
+bit could use 80 to 88. - see draft-aboba-avtcore-quic-multiplexing
 
 First byte of packet is a magic number that has 2 bits to indicate if it
-is an Sync, SyncAck, Reset or SynNOK, Data so that firewalls can use
+is an Sync, SyncAck, Reset, or Data so that firewalls can use
 that and one bit used for a spin bit.
 
 ## Sync, SyncAck
 
 Sync has senderID , auth, origin DNS name,
 
-
 Later we will add default resourceID , senderID, relaySenderID , and souceID 
 so theses can be compressed out of other messages.
 
 Sync has relay Seq Num, user extension vector
 
-has extra 64 bit magic to make sure firewalls can detect
+May have extra 64 bit magic to make sure firewalls can detect
 
 Minimal data due to go through firewalls before flow established.  Has
 nonce. Client and server both put in their idea of time.  Both sides
@@ -601,11 +647,13 @@ Do we want allow server to cause proof of aliveness for DDoS mitigation
 
 ## Reset
 
-Authenticated by TODO. Firewalls can recognize from header by TODO
+Authenticated by path token. Firewalls can recognize from header by TODO
 
 Auth with path secret ?
 
 has option redirect address
+
+has optiion restry with this nonce ( used for liveness detection in DDoS )
 
 must be authenticated
 
@@ -636,8 +684,6 @@ Ping OK has source IP and port seen by Relay.
 
 ## Pub
 
-Has net sequence number
-
 Has compressed short name
 
 Has bestBefore date
@@ -654,11 +700,7 @@ Has netSeqNum of packet it is acking and time received.
 
 ## Sub, SubAck ( or SubOK, SubNOK )
 
-Has netSeqNum ???
-
 Has shortName
-
-Has bit set if last fragment.
 
 ## Rate
 
@@ -696,22 +738,52 @@ The data in the Pub frames ( and the data in the SubData ) is encrypted
 at the Frame level before it if fragmented.  Thus all the fragments need
 to be received for it to be decoded.
 
-The short name is unique for this data so can be used as the IV.
+Data + origin + short Name is authenticated. Short name expanded to 64
+bit integer version of all IDs before authentication.
 
 The key could be generated from a TLS handshake, a MLS session, or just
 provided by a cloud oracle.
 
-Data is encrypted
+TODO key selection
 
-Data + short Name  (not compressed ) is authenticated
+The short name is unique for this data so can be used as the IV.
 
-For each senderID, applications provides a 96 bit salt + 128 or 256 bit
-key , and an auth tag length of 0, 64, 96, or 128 bit.
+Fragments are not encyrpted, only the full defragemnted data so
+ShortName allways has a FragmentID of 3;
 
-keys should not be used for more than 12 hours and must not be used for
+
+Data is encrypted with AES-CM-128-HMAC-SHA256-X where X is 0, 1,4,8, or
+16 bytes.
+
+Inputs: plainText, origin, shortName, tagLen, senderKey
+
+prk = HKDF-SHA256-Setup( origin | senderKey, "QuicR 1"  )
+encKey = HKDF-SHA256-Extract( prk, "enc1" , 128/8 )
+authKey = HKDF-SHA256-Extract( prk, "auth1" , 256/8 )
+
+nonce = HKDF-SHA256-Extract( prk, "salt1" | shortname , (128-16)/8 )
+
+iv = nonce | one16bit 
+cipherText = AES128-CTR( encKey, iv, plainText )
+
+textLen = len( plainText )
+authData = tagLen | origin | shortName 
+fullTag = HMAC_SHA256( authKey,  cipherText | textLen | authData  )
+tag = truncate( fullTag, tagLen )
+
+Output: cipherText, authTag 
+
+Note: one16bit is a 16 bit integer of value 1. This allows for 2^16 uses
+of AES128 with that IV which gives 1 MB of data for the chunk.
+
+Note: HKDR basicly turns in into HMAC. HMAC turns into two SHA. 
+
+Keys should not be used for more than 12 hours and must not be used for
 encryption more than TODO times.
 
-When rekeying, the key needs new salt and new senderID
+The time that a MediaTime that a key becomes valid is kept for each
+SenderID and used to lookup the correct key.
+
 
 
 # NATs, Firewalls, Load balancers
@@ -791,31 +863,9 @@ Thanks to TODO for review and contributions.
 - PhaseLengthMs=33.333
 - PhasesPerCycle=5
 - MaxUDPSize=1200
-- DefaultPort=
+- DefaultPort=5004 
 
-# Open Issue
 
-- how to cancel subscription
-
-- more on relay design, upstream relay, HA cluster relay
-
-# TODO Things
-
-Change media sequence number to media time
-
-How does reliably retransmission work in downstream direction
-
-TODO - when fragmenting, make equal size fragments
-
-TODO - get rid of short name concept
-
-TODO - document layouts:
-
-- Design Rational & Philosophy
-
-- Extensions (spin, time set, )
-
-- Usage examples webex, youtube, twitter, slack, IoT, Gaming
 
 # TODO move - Real Time Applications
 
@@ -840,8 +890,8 @@ Figure triangle , Throughput, delay, loss
 
 # Appendix Extension: Consolidation
 
-Allow merge of packets, prefer constant packet rate in defined packet transmission
-internal.
+Allow merge of packets, prefer constant packet rate in defined packet
+transmission internal.
 
 TODO - move to be in the priority Q
 
@@ -892,7 +942,8 @@ of the Relay software during operation.
 
 # TODO 
 
-Assume codecs are safe. Send auth tag 1 per second and rest of media no auth
+Assume codecs are safe. Send auth tag 1 per second and rest of media no
+auth
 
 Packet rates 
      ppp   delay  maxRate    minRate
@@ -918,5 +969,27 @@ UWW - Use what works
 
 vary bandwidth, packet rate, and DSCP 
 
-TODO - so because all seq num not authed, attacker can fuck with timing of things and DDoS flow 
+TODO - so because all seq num not authed, attacker can fuck with timing
+of things and DDoS flow
 
+# Open Issue
+
+- how to cancel subscription
+
+- more on relay design, upstream relay, HA cluster relay
+
+# TODO Things
+
+
+How does reliably retransmission work in downstream direction
+
+TODO - when fragmenting, make equal size fragments
+
+
+TODO - document layouts:
+
+- Design Rational & Philosophy
+
+- Extensions (spin, time set, )
+
+- Usage examples webex, youtube, twitter, slack, IoT, Gaming
