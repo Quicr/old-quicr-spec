@@ -517,7 +517,7 @@ little endian format and not network byte order.
 EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
 
 
-Message  ::= pathToken ( Sync | SyncAck | Reset | Sub | ClientData Pub+ | Nack | Rate | Ack | RelayData SubData+ ) Header
+Message  ::= pathToken ( Sync | SyncAck | Reset | Sub | ClientData | Nack | Rate | Ack | RelayData  ) Header
 
 Sync ::= tagSync  cookie origin senderID clientTime supportedFeatureVec
 
@@ -541,42 +541,53 @@ Nack ::= tagNack   relaySeqNum
 Sub ::= tagSub  ShortName
 
 
+ClientData ::=  tagClientData clientSeqNum DataChunk+
 
+RelayData ::=  tagRelayData relaySeqNum DataChunk+
 
-ClientData ::=  tagClientData clientSeqNum
+DataChunk ::= ShortName lifeTime ( EncDataBlock | DataBlock )
 
-RelayData ::=  tagRelayData relaySeqNum
+ShortName ::= tagShortName resourceID senderID sourceID mediaTime fragmentID
 
-Pub ::= tagPubData ShortName lifeTime  EncDataBlock1
+EncDataBlock ::=  tagEncDataBlock authTagLen dataAndTagTotalLen cipherTextAndTagBytes
 
-SubData ::= tagSubData ShortName lifeTime EncDataBlock1
+DataBlock ::= tagDataBlock dataLen dataBytes
 
-
-Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck | tagPacketTypeRes|
-tagPacketTypeData
- tagPacketTypeSynCrazy | tagPacketTypSynAckCrazy | tagPacketTypeResCrazy
- |
- tagPacketTypeDataCrazy  )
-
-
-EncDataBlock1 ::=  authTagLen dataAndTagTotalLen cipherTextAndTagData
-
-DataBlock ::= dataLen dataBytes
-
-ShortName ::= tagShortName1 resourceID senderID sourceID mediaTime fragmentID
+Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck 
+        | tagPacketTypeRes |  tagPacketTypeData
+        | tagPacketTypeSynCrazy | tagPacketTypSynAckCrazy
+        | tagPacketTypeResCrazy | tagPacketTypeDataCrazy  )
 
 
 lifeTime ::=  varInt
-
 bitRate ::= varInt
-
 seqNum ::= varInt
-
 senderID ::= varInt
-
 clientTime ::= varInt
-
 versionVec1 ::= varInt
+cookie::= varInt
+originLen::= varInt
+port ::= varInt
+senderID::= varInt
+clientTime::= varInt
+supportedFeatureVec::= varInt
+serverTime::= varInt
+userFeatureVec::= varInt
+recvTime::= varInt
+clientSeqNum::= varInt
+ackVec::= varInt
+encVec::= varInt
+bitRate::= varInt
+relaySeqNum::= varInt
+clientDqwNum::= varInt
+dataANdTagTotalLen ::= varInt
+authTagLen::= varInt
+dataLen::= varInt
+
+originStringBytes ::= byte+
+ciperTextAndTagBytes ::= bytes+
+dataBytes ::= bytes+
+
 
 varInt ::= Int7 | Int14 | Int29 | Int60
 
