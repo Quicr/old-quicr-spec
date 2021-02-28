@@ -1,8 +1,5 @@
-% QuicR Design
-% Cullen Jennings
-% Feb 2021
 
-# QuicR - Quick Real-time Data Transport
+# Introduction
 
 This outlines the design for QuicR, a real time datagram transport
 protocol.  It is based on a pub/sub metaphor where clients endpoints
@@ -821,7 +818,7 @@ Simple load balancers can forward the Sync packets based on load of
 relays in a pool then keep future packets in that same UDP 5 tuple
 sticky to the relay the Sync was sent to.
 
-# 0-RTT
+# Zero RTT
 
 The Syn, Pub, and Sub can call be sent  overlapped at the same time to
 get a zero round trip time startup.
