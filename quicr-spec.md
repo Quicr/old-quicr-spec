@@ -513,10 +513,13 @@ little endian format and not network byte order.
 
 EBNF below can be rendered at https://www.bottlecaps.de/rr/ui
 
+```
 
-Message  ::= pathToken ( Sync | SyncAck | Reset | Sub | ClientData | Nack | Rate | Ack | RelayData  ) Header
+Message  ::= pathToken ( Sync | SyncAck | Reset |
+    Sub | ClientData | Nack | Rate | Ack | RelayData  ) Header
 
-Sync ::= tagSync  cookie origin senderID clientTime supportedFeatureVec
+Sync ::= tagSync  cookie origin senderID
+    clientTime supportedFeatureVec
 
 SyncAck ::= tagSyncAck  serverTime useFeatureVec 
 
@@ -544,9 +547,11 @@ RelayData ::=  tagRelayData relaySeqNum DataChunk+
 
 DataChunk ::= ShortName lifeTime ( EncDataBlock | DataBlock )
 
-ShortName ::= tagShortName resourceID senderID sourceID mediaTime fragmentID
+ShortName ::= tagShortName resourceID
+    senderID sourceID mediaTime fragmentID
 
-EncDataBlock ::=  tagEncDataBlock authTagLen dataAndTagTotalLen cipherTextAndTagBytes
+EncDataBlock ::=  tagEncDataBlock authTagLen
+    dataAndTagTotalLen cipherTextAndTagBytes
 
 DataBlock ::= tagDataBlock dataLen dataBytes
 
@@ -587,6 +592,8 @@ dataBytes ::= bytes+
 
 
 varInt ::= Int7 | Int14 | Int29 | Int60
+
+```
 
 
 ## Variable length integer
@@ -767,9 +774,8 @@ The short name is unique for this data so can be used as the IV.
 Fragments are not encyrpted, only the full defragemnted data so
 ShortName allways has a FragmentID of 3;
 
-
-Data is encrypted with AES-CM-128-HMAC-SHA256-X where X is 0, 1,4,8, or
-16 bytes.
+Data is encrypted with AES-CM-128-HMAC-SHA256-X
+where X is 0, 1,4,8, or 16 bytes.
 
 Inputs: plainText, origin, shortName, tagLen, senderKey
 
@@ -961,13 +967,16 @@ of the Relay software during operation.
 Assume codecs are safe. Send auth tag 1 per second and rest of media no
 auth
 
+```
 Packet rates 
      ppp   delay  maxRate    minRate
  960 pps =  1ms = 9.2 mbps  = 384 kbps
  240 pps =  4ms = 2.3 mbps  =  96 kbps
   60 pps = 17ms = 0.6 mbps  =  24 kbps
   15 pps = 67ms = 144 kbps  =   6 kbps
+  ```
 
+```
 Constant packet rate helps deal with burst loss 
 1000 pps =   1 ms = 9.6 mbps  = 400 kbps 
  500 pps =   2 ms = 4.8 mbps  = 200 kbps 
@@ -976,7 +985,7 @@ Constant packet rate helps deal with burst loss
   50 pps =  20 ms = 480 kbps  =  20 kbps 
   30 pps =  33 ms = 288 kbps  =  12 kbps
   10 pps = 100 ms =  96 kbps  =   4 kbps
-
+```
 
 
 TODO - congestion control
