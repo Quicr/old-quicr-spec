@@ -5,7 +5,7 @@
 
 .PHONE: all clean lint format
 
-all: gen/quicr.pdf gen/draft-jennings-quicr.txt
+all: gen/draft-jennings-quicr.txt
 
 clean:
 	rm -rf gen/*
