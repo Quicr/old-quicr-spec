@@ -1,0 +1,71 @@
+Message  ::= pathToken ( Sync | SyncAck | Reset |
+    Sub | ClientData | Nack | Rate | Ack | RelayData  ) Header
+
+Sync ::= tagSync  cookie origin senderID
+    clientTime supportedFeatureVec
+
+SyncAck ::= tagSyncAck  serverTime useFeatureVec
+
+Reset ::= tagReset
+
+Reset ::= tagResetRedirect  cookie originLen orginStringBytes port
+
+Reset ::= tagResetRetry  cookie
+
+Ack ::= tagAck  recvTime clientSeqNum ackVec ecnVec
+
+Rate ::= tagRate   bitRate
+
+Nack ::= tagNack   relaySeqNum
+
+Sub ::= tagSub  ShortName
+
+ClientData ::=  tagClientData clientSeqNum DataChunk+
+
+RelayData ::=  tagRelayData relaySeqNum DataChunk+
+
+DataChunk ::= ShortName lifeTime ( EncDataBlock | DataBlock )
+
+ShortName ::= tagShortName resourceID
+    senderID sourceID mediaTime fragmentID
+
+EncDataBlock ::=  tagEncDataBlock authTagLen
+    dataAndTagTotalLen cipherTextAndTagBytes
+
+DataBlock ::= tagDataBlock dataLen dataBytes
+
+Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck
+        | tagPacketTypeRes |  tagPacketTypeData
+        | tagPacketTypeSynCrazy | tagPacketTypSynAckCrazy
+        | tagPacketTypeResCrazy | tagPacketTypeDataCrazy  )
+
+lifeTime ::=  varInt
+bitRate ::= varInt
+seqNum ::= varInt
+senderID ::= varInt
+clientTime ::= varInt
+versionVec1 ::= varInt
+cookie::= varInt
+originLen::= varInt
+port ::= varInt
+senderID::= varInt
+clientTime::= varInt
+supportedFeatureVec::= varInt
+serverTime::= varInt
+userFeatureVec::= varInt
+recvTime::= varInt
+clientSeqNum::= varInt
+ackVec::= varInt
+encVec::= varInt
+bitRate::= varInt
+relaySeqNum::= varInt
+clientDqwNum::= varInt
+dataANdTagTotalLen ::= varInt
+authTagLen::= varInt
+dataLen::= varInt
+
+originStringBytes ::= byte+
+ciperTextAndTagBytes ::= bytes+
+dataBytes ::= bytes+
+
+varInt ::= Int7 | Int14 | Int29 | Int60
