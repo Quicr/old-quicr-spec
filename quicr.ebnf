@@ -1,5 +1,6 @@
-Message  ::= pathToken ( Sync | SyncAck | Reset |
-    Subscribe | ClientData | Nack | Rate | Ack | RelayData  ) Header
+Message  ::= pathToken ( Sync | SyncAck | Reset | Subscribe |
+    Nack | Rate | Ack | 
+    ( ( ClientData | RelayData)  (NamedDataChunk ( EncDataBlock | DataBlock ) data )+ ) ) Header
 
 Sync ::= tagSync  cookie origin senderID
     clientTime supportedFeatureVec
@@ -20,19 +21,17 @@ Nack ::= tagNack   relaySeqNum
 
 Subscribe ::= tagSubscribe  ShortName
 
-ClientData ::=  tagClientData clientSeqNum NamedDataChunk+
+ClientData ::=  tagClientData clientSeqNum 
 
-RelayData ::=  tagRelayData relaySeqNum NamedDataChunk+
+RelayData ::=  tagRelayData relaySeqNum relaySendTime
 
-NamedDataChunk ::= ShortName lifeTime ( EncDataBlock | DataBlock )
+NamedDataChunk ::= ShortName lifeTime 
 
-ShortName ::= tagShortName resourceID
-    senderID sourceID mediaTime fragmentID
+ShortName ::= tagShortName resourceID senderID sourceID mediaTime fragmentID
 
-EncDataBlock ::=  tagEncDataBlock authTagLen
-    dataAndTagTotalLen cipherTextAndTagBytes
+EncDataBlock ::=  tagEncDataBlock authTagLen metaDataLen cipherTextLen 
 
-DataBlock ::= tagDataBlock dataLen dataBytes
+DataBlock ::= tagDataBlock metaDataLen dataLen 
 
 Header ::=  ( tagHeaderSyn | tagPacketTypSynAck
         | tagHeaderRst |  tagHeaderData

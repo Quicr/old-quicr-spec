@@ -403,7 +403,8 @@ The tag values are 14 bit integers and encoded
 as a variable length integer. The tag contains a flag
 if it is mandatory to understand.
 
-TODO - add ref to tag definitions file
+The tag constants are defined in
+https://github.com/Quicr/quicr/blob/main/include/packetTag.hh 
 
 ## Header
 

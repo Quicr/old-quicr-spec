@@ -6,7 +6,7 @@
 
 .PHONE: all clean lint format
 
-all: gen/draft-jennings-quicr.txt
+all: gen/draft-jennings-quicr.txt quicr-gramar.html
 
 clean:
 	rm -rf gen/*
@@ -19,7 +19,7 @@ format:
 	mmark -markdown quicr-spec.md >  gen/quicr-spec.md
 	echo updated MD is in  gen/quicr-spec.md
 
-gen/draft-jennings-quicr.xml: rfc.md abstract.md  quicr-spec.md contributors.md 
+gen/draft-jennings-quicr.xml: rfc.md abstract.md  quicr-spec.md contributors.md  quicr.ebnf
 	mkdir -p gen
 	mmark -w rfc.md > gen/draft-jennings-quicr.xml
 
@@ -37,7 +37,7 @@ gen/quicr.pdf: abstract.md  quicr-spec.md contributors.md
 	pandoc -s title.md abstract.md  quicr-spec.md contributors.md -o gen/quicr.pdf
 
 
-gen/diagram.zip: quicr.ebnf
+quicr-gramar.html: quicr.ebnf
 	mkdir -p gen 
 	java -jar lib/rr.war -png -noinline -color:#FFFFFF -out:gen/digram.zip quicr.ebnf
 	unzip -o gen/digram.zip

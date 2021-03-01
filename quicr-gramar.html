@@ -1,0 +1,533 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="generator" content="Railroad Diagram Generator 1.62">
+      <style type="text/css">
+    ::-moz-selection
+    {
+      color: #FFFFFF;
+      background: #141414;
+    }
+    ::selection
+    {
+      color: #FFFFFF;
+      background: #141414;
+    }
+    .ebnf a, .grammar a
+    {
+      text-decoration: none;
+    }
+    .ebnf a:hover, .grammar a:hover
+    {
+      color: #0F0F0F;
+      text-decoration: underline;
+    }
+    .signature
+    {
+      color: #4D4D4D;
+      font-size: 11px;
+      text-align: right;
+    }
+    body
+    {
+      font: normal 12px Verdana, sans-serif;
+      color: #141414;
+      background: #FFFFFF;
+    }
+    a:link, a:visited
+    {
+      color: #141414;
+    }
+    a:link.signature, a:visited.signature
+    {
+      color: #4D4D4D;
+    }
+    a.button, #tabs li a
+    {
+      padding: 0.25em 0.5em;
+      border: 1px solid #4D4D4D;
+      background: #E3E3E3;
+      color: #4D4D4D;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.button:hover, #tabs li a:hover
+    {
+      color: #0F0F0F;
+      background: #F0F0F0;
+      border-color: #0F0F0F;
+    }
+    #tabs
+    {
+      padding: 3px 10px;
+      margin-left: 0;
+      margin-top: 58px;
+      border-bottom: 1px solid #141414;
+    }
+    #tabs li
+    {
+      list-style: none;
+      margin-left: 5px;
+      display: inline;
+    }
+    #tabs li a
+    {
+      border-bottom: 1px solid #141414;
+    }
+    #tabs li a.active
+    {
+      color: #141414;
+      background: #FFFFFF;
+      border-color: #141414;
+      border-bottom: 1px solid #FFFFFF;
+      outline: none;
+    }
+    #divs div
+    {
+      display: none;
+      overflow:auto;
+    }
+    #divs div.active
+    {
+      display: block;
+    }
+    #text
+    {
+      border-color: #4D4D4D;
+      background: #FFFFFF;
+      color: #0F0F0F;
+    }
+    .small
+    {
+      vertical-align: top;
+      text-align: right;
+      font-size: 9px;
+      font-weight: normal;
+      line-height: 120%;
+    }
+    td.small
+    {
+      padding-top: 0px;
+    }
+    .hidden
+    {
+      visibility: hidden;
+    }
+    td:hover .hidden
+    {
+      visibility: visible;
+    }
+    div.download
+    {
+      display: none;
+      background: #FFFFFF;
+      position: absolute;
+      right: 34px;
+      top: 94px;
+      padding: 10px;
+      border: 1px dotted #141414;
+    }
+    #divs div.ebnf, .ebnf code
+    {
+      display: block;
+      padding: 10px;
+      background: #F0F0F0;
+      width: 992px;
+    }
+    #divs div.grammar
+    {
+      display: block;
+      padding-left: 16px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      background: #F0F0F0;
+    }
+    pre
+    {
+      margin: 0px;
+    }
+    .ebnf div
+    {
+      padding-left: 13ch;
+      text-indent: -13ch;
+    }
+    .ebnf code, .grammar code, textarea, pre
+    {
+      font:12px SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+    }
+    tr.option-line td:first-child
+    {
+      text-align: right
+    }
+    tr.option-text td
+    {
+      padding-bottom: 10px
+    }
+    table.palette
+    {
+      border-top: 1px solid #0F0F0F;
+      border-right: 1px solid #0F0F0F;
+      margin-bottom: 4px
+    }
+    td.palette
+    {
+      border-bottom: 1px solid #0F0F0F;
+      border-left: 1px solid #0F0F0F;
+    }
+    a.palette
+    {
+      padding: 2px 3px 2px 10px;
+      text-decoration: none;
+    }
+    .palette
+    {
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -o-user-select: none;
+      -ms-user-select: none;
+    }
+  </style>
+   </head>
+   <body>
+      <p style="font-size: 14px; font-weight:bold"><a name="Message">Message:</a></p><img border="0" src="diagram/Message.png" height="411" width="843" usemap="#Message.map"><map name="Message.map"><area shape="rect" coords="29,1,115,33" href="#pathToken" title="pathToken"><area shape="rect" coords="155,1,203,33" href="#Sync" title="Sync"><area shape="rect" coords="155,45,225,77" href="#SyncAck" title="SyncAck"><area shape="rect" coords="155,89,211,121" href="#Reset" title="Reset"><area shape="rect" coords="155,133,237,165" href="#Subscribe" title="Subscribe"><area shape="rect" coords="155,177,205,209" href="#Nack" title="Nack"><area shape="rect" coords="155,221,203,253" href="#Rate" title="Rate"><area shape="rect" coords="155,265,197,297" href="#Ack" title="Ack"><area shape="rect" coords="175,331,261,363" href="#ClientData" title="ClientData"><area shape="rect" coords="175,375,259,407" href="#RelayData" title="RelayData"><area shape="rect" coords="321,331,455,363" href="#NamedDataChunk" title="NamedDataChunk"><area shape="rect" coords="495,331,599,363" href="#EncDataBlock" title="EncDataBlock"><area shape="rect" coords="495,375,577,407" href="#DataBlock" title="DataBlock"><area shape="rect" coords="639,331,687,363" href="#data" title="data"><area shape="rect" coords="747,1,813,33" href="#Header" title="Header"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Message" title="Message">Message</a>&nbsp;&nbsp;::= <a href="#pathToken" title="pathToken">pathToken</a> ( <a href="#Sync" title="Sync">Sync</a> | <a href="#SyncAck" title="SyncAck">SyncAck</a> | <a href="#Reset" title="Reset">Reset</a> | <a href="#Subscribe" title="Subscribe">Subscribe</a> | <a href="#Nack" title="Nack">Nack</a> | <a href="#Rate" title="Rate">Rate</a> | <a href="#Ack" title="Ack">Ack</a> | ( <a href="#ClientData" title="ClientData">ClientData</a> | <a href="#RelayData" title="RelayData">RelayData</a> ) ( <a href="#NamedDataChunk" title="NamedDataChunk">NamedDataChunk</a> ( <a href="#EncDataBlock" title="EncDataBlock">EncDataBlock</a> | <a href="#DataBlock" title="DataBlock">DataBlock</a> ) <a href="#data" title="data">data</a> )+ ) <a href="#Header" title="Header">Header</a></div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="Sync">Sync:</a></p><img border="0" src="diagram/Sync.png" height="37" width="663" usemap="#Sync.map"><map name="Sync.map"><area shape="rect" coords="29,1,99,33" href="#tagSync" title="tagSync"><area shape="rect" coords="119,1,179,33" href="#cookie" title="cookie"><area shape="rect" coords="199,1,255,33" href="#origin" title="origin"><area shape="rect" coords="275,1,353,33" href="#senderID" title="senderID"><area shape="rect" coords="373,1,457,33" href="#clientTime" title="clientTime"><area shape="rect" coords="477,1,633,33" href="#supportedFeatureVec" title="supportedFeatureVec"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Sync" title="Sync">Sync</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagSync" title="tagSync">tagSync</a> <a href="#cookie" title="cookie">cookie</a> <a href="#origin" title="origin">origin</a> <a href="#senderID" title="senderID">senderID</a> <a href="#clientTime" title="clientTime">clientTime</a> <a href="#supportedFeatureVec" title="supportedFeatureVec">supportedFeatureVec</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="SyncAck">SyncAck:</a></p><img border="0" src="diagram/SyncAck.png" height="37" width="395" usemap="#SyncAck.map"><map name="SyncAck.map"><area shape="rect" coords="29,1,121,33" href="#tagSyncAck" title="tagSyncAck"><area shape="rect" coords="141,1,231,33" href="#serverTime" title="serverTime"><area shape="rect" coords="251,1,365,33" href="#useFeatureVec" title="useFeatureVec"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#SyncAck" title="SyncAck">SyncAck</a>&nbsp;&nbsp;::= <a href="#tagSyncAck" title="tagSyncAck">tagSyncAck</a> <a href="#serverTime" title="serverTime">serverTime</a> <a href="#useFeatureVec" title="useFeatureVec">useFeatureVec</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Reset">Reset:</a></p><img border="0" src="diagram/Reset.png" height="125" width="615" usemap="#Reset.map"><map name="Reset.map"><area shape="rect" coords="49,1,125,33" href="#tagReset" title="tagReset"><area shape="rect" coords="49,45,177,77" href="#tagResetRedirect" title="tagResetRedirect"><area shape="rect" coords="197,45,257,77" href="#cookie" title="cookie"><area shape="rect" coords="277,45,355,77" href="#originLen" title="originLen"><area shape="rect" coords="375,45,499,77" href="#orginStringBytes" title="orginStringBytes"><area shape="rect" coords="519,45,565,77" href="#port" title="port"><area shape="rect" coords="49,89,159,121" href="#tagResetRetry" title="tagResetRetry"><area shape="rect" coords="179,89,239,121" href="#cookie" title="cookie"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Reset" title="Reset">Reset</a>&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagReset" title="tagReset">tagReset</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagResetRedirect" title="tagResetRedirect">tagResetRedirect</a> <a href="#cookie" title="cookie">cookie</a> <a href="#originLen" title="originLen">originLen</a> <a href="#orginStringBytes" title="orginStringBytes">orginStringBytes</a> <a href="#port" title="port">port</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagResetRetry" title="tagResetRetry">tagResetRetry</a> <a href="#cookie" title="cookie">cookie</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Ack">Ack:</a></p><img border="0" src="diagram/Ack.png" height="37" width="511" usemap="#Ack.map"><map name="Ack.map"><area shape="rect" coords="29,1,91,33" href="#tagAck" title="tagAck"><area shape="rect" coords="111,1,217,33" href="#clientSeqNum" title="clientSeqNum"><area shape="rect" coords="237,1,313,33" href="#recvTime" title="recvTime"><area shape="rect" coords="333,1,397,33" href="#ackVec" title="ackVec"><area shape="rect" coords="417,1,481,33" href="#ecnVec" title="ecnVec"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Ack" title="Ack">Ack</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagAck" title="tagAck">tagAck</a> <a href="#clientSeqNum" title="clientSeqNum">clientSeqNum</a> <a href="#recvTime" title="recvTime">recvTime</a> <a href="#ackVec" title="ackVec">ackVec</a> <a href="#ecnVec" title="ecnVec">ecnVec</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Rate">Rate:</a></p><img border="0" src="diagram/Rate.png" height="37" width="215" usemap="#Rate.map"><map name="Rate.map"><area shape="rect" coords="29,1,99,33" href="#tagRate" title="tagRate"><area shape="rect" coords="119,1,185,33" href="#bitRate" title="bitRate"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Rate" title="Rate">Rate</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagRate" title="tagRate">tagRate</a> <a href="#bitRate" title="bitRate">bitRate</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Nack">Nack:</a></p><img border="0" src="diagram/Nack.png" height="37" width="253" usemap="#Nack.map"><map name="Nack.map"><area shape="rect" coords="29,1,99,33" href="#tagNack" title="tagNack"><area shape="rect" coords="119,1,223,33" href="#relaySeqNum" title="relaySeqNum"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Nack" title="Nack">Nack</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagNack" title="tagNack">tagNack</a> <a href="#relaySeqNum" title="relaySeqNum">relaySeqNum</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Subscribe">Subscribe:</a></p><img border="0" src="diagram/Subscribe.png" height="37" width="271" usemap="#Subscribe.map"><map name="Subscribe.map"><area shape="rect" coords="29,1,131,33" href="#tagSubscribe" title="tagSubscribe"><area shape="rect" coords="151,1,241,33" href="#ShortName" title="ShortName"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Subscribe" title="Subscribe">Subscribe</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagSubscribe" title="tagSubscribe">tagSubscribe</a> <a href="#ShortName" title="ShortName">ShortName</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="ClientData">ClientData:</a></p><img border="0" src="diagram/ClientData.png" height="37" width="293" usemap="#ClientData.map"><map name="ClientData.map"><area shape="rect" coords="29,1,137,33" href="#tagClientData" title="tagClientData"><area shape="rect" coords="157,1,263,33" href="#clientSeqNum" title="clientSeqNum"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#ClientData" title="ClientData">ClientData</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagClientData" title="tagClientData">tagClientData</a> <a href="#clientSeqNum" title="clientSeqNum">clientSeqNum</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="RelayData">RelayData:</a></p><img border="0" src="diagram/RelayData.png" height="37" width="423" usemap="#RelayData.map"><map name="RelayData.map"><area shape="rect" coords="29,1,135,33" href="#tagRelayData" title="tagRelayData"><area shape="rect" coords="155,1,259,33" href="#relaySeqNum" title="relaySeqNum"><area shape="rect" coords="279,1,393,33" href="#relaySendTime" title="relaySendTime"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#RelayData" title="RelayData">RelayData</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagRelayData" title="tagRelayData">tagRelayData</a> <a href="#relaySeqNum" title="relaySeqNum">relaySeqNum</a> <a href="#relaySendTime" title="relaySendTime">relaySendTime</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="NamedDataChunk">NamedDataChunk:</a></p><img border="0" src="diagram/NamedDataChunk.png" height="37" width="237" usemap="#NamedDataChunk.map"><map name="NamedDataChunk.map"><area shape="rect" coords="29,1,119,33" href="#ShortName" title="ShortName"><area shape="rect" coords="139,1,207,33" href="#lifeTime" title="lifeTime"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#NamedDataChunk" title="NamedDataChunk">NamedDataChunk</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#ShortName" title="ShortName">ShortName</a> <a href="#lifeTime" title="lifeTime">lifeTime</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="ShortName">ShortName:</a></p><img border="0" src="diagram/ShortName.png" height="37" width="695" usemap="#ShortName.map"><map name="ShortName.map"><area shape="rect" coords="29,1,141,33" href="#tagShortName" title="tagShortName"><area shape="rect" coords="161,1,251,33" href="#resourceID" title="resourceID"><area shape="rect" coords="271,1,349,33" href="#senderID" title="senderID"><area shape="rect" coords="369,1,445,33" href="#sourceID" title="sourceID"><area shape="rect" coords="465,1,553,33" href="#mediaTime" title="mediaTime"><area shape="rect" coords="573,1,665,33" href="#fragmentID" title="fragmentID"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#ShortName" title="ShortName">ShortName</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagShortName" title="tagShortName">tagShortName</a> <a href="#resourceID" title="resourceID">resourceID</a> <a href="#senderID" title="senderID">senderID</a> <a href="#sourceID" title="sourceID">sourceID</a> <a href="#mediaTime" title="mediaTime">mediaTime</a> <a href="#fragmentID" title="fragmentID">fragmentID</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#NamedDataChunk" title="NamedDataChunk">NamedDataChunk</a></li>
+            <li><a href="#Subscribe" title="Subscribe">Subscribe</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="EncDataBlock">EncDataBlock:</a></p><img border="0" src="diagram/EncDataBlock.png" height="37" width="553" usemap="#EncDataBlock.map"><map name="EncDataBlock.map"><area shape="rect" coords="29,1,155,33" href="#tagEncDataBlock" title="tagEncDataBlock"><area shape="rect" coords="175,1,269,33" href="#authTagLen" title="authTagLen"><area shape="rect" coords="289,1,395,33" href="#metaDataLen" title="metaDataLen"><area shape="rect" coords="415,1,523,33" href="#cipherTextLen" title="cipherTextLen"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#EncDataBlock" title="EncDataBlock">EncDataBlock</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagEncDataBlock" title="tagEncDataBlock">tagEncDataBlock</a> <a href="#authTagLen" title="authTagLen">authTagLen</a> <a href="#metaDataLen" title="metaDataLen">metaDataLen</a> <a href="#cipherTextLen" title="cipherTextLen">cipherTextLen</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="DataBlock">DataBlock:</a></p><img border="0" src="diagram/DataBlock.png" height="37" width="381" usemap="#DataBlock.map"><map name="DataBlock.map"><area shape="rect" coords="29,1,133,33" href="#tagDataBlock" title="tagDataBlock"><area shape="rect" coords="153,1,259,33" href="#metaDataLen" title="metaDataLen"><area shape="rect" coords="279,1,351,33" href="#dataLen" title="dataLen"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#DataBlock" title="DataBlock">DataBlock</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#tagDataBlock" title="tagDataBlock">tagDataBlock</a> <a href="#metaDataLen" title="metaDataLen">metaDataLen</a> <a href="#dataLen" title="dataLen">dataLen</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="Header">Header:</a></p><img border="0" src="diagram/Header.png" height="345" width="285" usemap="#Header.map"><map name="Header.map"><area shape="rect" coords="49,1,159,33" href="#tagHeaderSyn" title="tagHeaderSyn"><area shape="rect" coords="49,45,199,77" href="#tagPacketTypSynAck" title="tagPacketTypSynAck"><area shape="rect" coords="49,89,155,121" href="#tagHeaderRst" title="tagHeaderRst"><area shape="rect" coords="49,133,165,165" href="#tagHeaderData" title="tagHeaderData"><area shape="rect" coords="49,177,195,209" href="#tagHeaderSynCrazy" title="tagHeaderSynCrazy"><area shape="rect" coords="49,221,235,253" href="#tagPacketTypSynAckCrazy" title="tagPacketTypSynAckCrazy"><area shape="rect" coords="49,265,195,297" href="#tagHeaderResCrazy" title="tagHeaderResCrazy"><area shape="rect" coords="49,309,203,341" href="#tagHeaderDataCrazy" title="tagHeaderDataCrazy"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#Header" title="Header">Header</a>&nbsp;&nbsp;&nbsp;::= <a href="#tagHeaderSyn" title="tagHeaderSyn">tagHeaderSyn</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagPacketTypSynAck" title="tagPacketTypSynAck">tagPacketTypSynAck</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagHeaderRst" title="tagHeaderRst">tagHeaderRst</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagHeaderData" title="tagHeaderData">tagHeaderData</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagHeaderSynCrazy" title="tagHeaderSynCrazy">tagHeaderSynCrazy</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagPacketTypSynAckCrazy" title="tagPacketTypSynAckCrazy">tagPacketTypSynAckCrazy</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagHeaderResCrazy" title="tagHeaderResCrazy">tagHeaderResCrazy</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#tagHeaderDataCrazy" title="tagHeaderDataCrazy">tagHeaderDataCrazy</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Message" title="Message">Message</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="clientSeqNum">clientSeqNum:</a></p><img border="0" src="diagram/clientSeqNum.png" height="37" width="121" usemap="#clientSeqNum.map"><map name="clientSeqNum.map"><area shape="rect" coords="29,1,91,33" href="#UInt32" title="UInt32"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#clientSeqNum" title="clientSeqNum">clientSeqNum</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#UInt32" title="UInt32">UInt32</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Ack" title="Ack">Ack</a></li>
+            <li><a href="#ClientData" title="ClientData">ClientData</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="relaySeqNum">relaySeqNum:</a></p><img border="0" src="diagram/relaySeqNum.png" height="37" width="121" usemap="#relaySeqNum.map"><map name="relaySeqNum.map"><area shape="rect" coords="29,1,91,33" href="#UInt32" title="UInt32"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#relaySeqNum" title="relaySeqNum">relaySeqNum</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#UInt32" title="UInt32">UInt32</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Nack" title="Nack">Nack</a></li>
+            <li><a href="#RelayData" title="RelayData">RelayData</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="lifeTime">lifeTime:</a></p><img border="0" src="diagram/lifeTime.png" height="37" width="117" usemap="#lifeTime.map"><map name="lifeTime.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#lifeTime" title="lifeTime">lifeTime</a>&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#NamedDataChunk" title="NamedDataChunk">NamedDataChunk</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="bitRate">bitRate:</a></p><img border="0" src="diagram/bitRate.png" height="37" width="117" usemap="#bitRate.map"><map name="bitRate.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#bitRate" title="bitRate">bitRate</a>&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Rate" title="Rate">Rate</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="senderID">senderID:</a></p><img border="0" src="diagram/senderID.png" height="37" width="117" usemap="#senderID.map"><map name="senderID.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#senderID" title="senderID">senderID</a>&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#ShortName" title="ShortName">ShortName</a></li>
+            <li><a href="#Sync" title="Sync">Sync</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="clientTime">clientTime:</a></p><img border="0" src="diagram/clientTime.png" height="37" width="117" usemap="#clientTime.map"><map name="clientTime.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#clientTime" title="clientTime">clientTime</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Sync" title="Sync">Sync</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="versionVec1">versionVec1:</a></p><img border="0" src="diagram/versionVec1.png" height="37" width="117" usemap="#versionVec1.map"><map name="versionVec1.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#versionVec1" title="versionVec1">versionVec1</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="cookie">cookie:</a></p><img border="0" src="diagram/cookie.png" height="37" width="117" usemap="#cookie.map"><map name="cookie.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#cookie" title="cookie">cookie</a>&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Reset" title="Reset">Reset</a></li>
+            <li><a href="#Sync" title="Sync">Sync</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="originLen">originLen:</a></p><img border="0" src="diagram/originLen.png" height="37" width="117" usemap="#originLen.map"><map name="originLen.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#originLen" title="originLen">originLen</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Reset" title="Reset">Reset</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="port">port:</a></p><img border="0" src="diagram/port.png" height="37" width="117" usemap="#port.map"><map name="port.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#port" title="port">port</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Reset" title="Reset">Reset</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="supportedFeatureVec">supportedFeatureVec:</a></p><img border="0" src="diagram/supportedFeatureVec.png" height="37" width="117" usemap="#supportedFeatureVec.map"><map name="supportedFeatureVec.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#supportedFeatureVec" title="supportedFeatureVec">supportedFeatureVec</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Sync" title="Sync">Sync</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="serverTime">serverTime:</a></p><img border="0" src="diagram/serverTime.png" height="37" width="117" usemap="#serverTime.map"><map name="serverTime.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#serverTime" title="serverTime">serverTime</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#SyncAck" title="SyncAck">SyncAck</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="userFeatureVec">userFeatureVec:</a></p><img border="0" src="diagram/userFeatureVec.png" height="37" width="117" usemap="#userFeatureVec.map"><map name="userFeatureVec.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#userFeatureVec" title="userFeatureVec">userFeatureVec</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="recvTime">recvTime:</a></p><img border="0" src="diagram/recvTime.png" height="37" width="117" usemap="#recvTime.map"><map name="recvTime.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#recvTime" title="recvTime">recvTime</a>&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Ack" title="Ack">Ack</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="ackVec">ackVec:</a></p><img border="0" src="diagram/ackVec.png" height="37" width="117" usemap="#ackVec.map"><map name="ackVec.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#ackVec" title="ackVec">ackVec</a>&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#Ack" title="Ack">Ack</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="encVec">encVec:</a></p><img border="0" src="diagram/encVec.png" height="37" width="117" usemap="#encVec.map"><map name="encVec.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#encVec" title="encVec">encVec</a>&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="dataANdTagTotalLen">dataANdTagTotalLen:</a></p><img border="0" src="diagram/dataANdTagTotalLen.png" height="37" width="117" usemap="#dataANdTagTotalLen.map"><map name="dataANdTagTotalLen.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#dataANdTagTotalLen" title="dataANdTagTotalLen">dataANdTagTotalLen</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="authTagLen">authTagLen:</a></p><img border="0" src="diagram/authTagLen.png" height="37" width="117" usemap="#authTagLen.map"><map name="authTagLen.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#authTagLen" title="authTagLen">authTagLen</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#EncDataBlock" title="EncDataBlock">EncDataBlock</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="dataLen">dataLen:</a></p><img border="0" src="diagram/dataLen.png" height="37" width="117" usemap="#dataLen.map"><map name="dataLen.map"><area shape="rect" coords="29,1,87,33" href="#varInt" title="varInt"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#dataLen" title="dataLen">dataLen</a>&nbsp;&nbsp;::= <a href="#varInt" title="varInt">varInt</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#DataBlock" title="DataBlock">DataBlock</a></li>
+         </ul>
+      </p><br><p style="font-size: 14px; font-weight:bold"><a name="originStringBytes">originStringBytes:</a></p><img border="0" src="diagram/originStringBytes.png" height="53" width="147" usemap="#originStringBytes.map"><map name="originStringBytes.map"><area shape="rect" coords="49,17,97,49" href="#byte" title="byte"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#originStringBytes" title="originStringBytes">originStringBytes</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#byte" title="byte">byte</a>+</div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="ciperTextAndTagBytes">ciperTextAndTagBytes:</a></p><img border="0" src="diagram/ciperTextAndTagBytes.png" height="53" width="153" usemap="#ciperTextAndTagBytes.map"><map name="ciperTextAndTagBytes.map"><area shape="rect" coords="49,17,103,49" href="#bytes" title="bytes"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#ciperTextAndTagBytes" title="ciperTextAndTagBytes">ciperTextAndTagBytes</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#bytes" title="bytes">bytes</a>+</div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="dataBytes">dataBytes:</a></p><img border="0" src="diagram/dataBytes.png" height="53" width="153" usemap="#dataBytes.map"><map name="dataBytes.map"><area shape="rect" coords="49,17,103,49" href="#bytes" title="bytes"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#dataBytes" title="dataBytes">dataBytes</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;::= <a href="#bytes" title="bytes">bytes</a>+</div></code></div>
+      </p>
+      <p>no references</p><br><p style="font-size: 14px; font-weight:bold"><a name="varInt">varInt:</a></p><img border="0" src="diagram/varInt.png" height="169" width="153" usemap="#varInt.map"><map name="varInt.map"><area shape="rect" coords="49,1,95,33" href="#Int7" title="Int7"><area shape="rect" coords="49,45,103,77" href="#Int14" title="Int14"><area shape="rect" coords="49,89,103,121" href="#Int29" title="Int29"><area shape="rect" coords="49,133,103,165" href="#Int60" title="Int60"></map><p>
+         <div class="ebnf"><code>
+               <div><a href="#varInt" title="varInt">varInt</a>&nbsp;&nbsp;&nbsp;::= <a href="#Int7" title="Int7">Int7</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#Int14" title="Int14">Int14</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#Int29" title="Int29">Int29</a></div>
+               <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a href="#Int60" title="Int60">Int60</a></div></code></div>
+      </p>
+      <p>referenced by:
+         <ul>
+            <li><a href="#ackVec" title="ackVec">ackVec</a></li>
+            <li><a href="#authTagLen" title="authTagLen">authTagLen</a></li>
+            <li><a href="#bitRate" title="bitRate">bitRate</a></li>
+            <li><a href="#clientTime" title="clientTime">clientTime</a></li>
+            <li><a href="#cookie" title="cookie">cookie</a></li>
+            <li><a href="#dataANdTagTotalLen" title="dataANdTagTotalLen">dataANdTagTotalLen</a></li>
+            <li><a href="#dataLen" title="dataLen">dataLen</a></li>
+            <li><a href="#encVec" title="encVec">encVec</a></li>
+            <li><a href="#lifeTime" title="lifeTime">lifeTime</a></li>
+            <li><a href="#originLen" title="originLen">originLen</a></li>
+            <li><a href="#port" title="port">port</a></li>
+            <li><a href="#recvTime" title="recvTime">recvTime</a></li>
+            <li><a href="#senderID" title="senderID">senderID</a></li>
+            <li><a href="#serverTime" title="serverTime">serverTime</a></li>
+            <li><a href="#supportedFeatureVec" title="supportedFeatureVec">supportedFeatureVec</a></li>
+            <li><a href="#userFeatureVec" title="userFeatureVec">userFeatureVec</a></li>
+            <li><a href="#versionVec1" title="versionVec1">versionVec1</a></li>
+         </ul>
+      </p><br><hr>
+      <p>
+         <table border="0" class="signature">
+            <tr>
+               <td style="width: 100%">&nbsp;</td>
+               <td valign="top">
+                  <nobr class="signature">... generated by <a name="Railroad-Diagram-Generator" class="signature" title="https://bottlecaps.de/rr" href="https://bottlecaps.de/rr" target="_blank">RR - Railroad Diagram Generator</a></nobr>
+               </td>
+               <td><a name="Railroad-Diagram-Generator" title="https://bottlecaps.de/rr" href="https://bottlecaps.de/rr" target="_blank"><img border="0" src="diagram/rr-1.62.png" height="16" width="16"></a></td>
+            </tr>
+         </table>
+      </p>
+   </body>
+</html>
