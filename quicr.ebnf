@@ -29,7 +29,7 @@ NamedDataChunk ::= ShortName lifeTime
 
 ShortName ::= tagShortName resourceID senderID sourceID mediaTime fragmentID
 
-EncDataBlock ::=  tagEncDataBlock authTagLen metaDataLen cipherTextLen 
+EncDataBlock ::=  tagEncDataBlock authTagLen metaDataLen cipherDataLen 
 
 DataBlock ::= tagDataBlock metaDataLen dataLen 
 
