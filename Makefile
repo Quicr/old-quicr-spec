@@ -2,6 +2,7 @@
 # install xml2rfc with "pip install xml2rfc"
 # install mmark from https://github.com/mmarkdown/mmark 
 # install pandoc from https://pandoc.org/installing.html
+# install lib/rr.war from https://bottlecaps.de/rr/ui or https://github.com/GuntherRademacher/rr
 
 .PHONE: all clean lint format
 
@@ -34,4 +35,12 @@ gen/draft-jennings-quicr.html: gen/draft-jennings-quicr.xml
 gen/quicr.pdf: abstract.md  quicr-spec.md contributors.md 
 	mkdir -p gen 
 	pandoc -s title.md abstract.md  quicr-spec.md contributors.md -o gen/quicr.pdf
+
+
+gen/diagram.zip: quicr.ebnf
+	mkdir -p gen 
+	java -jar lib/rr.war -png -noinline -color:#FFFFFF -out:gen/digram.zip quicr.ebnf
+	unzip -o gen/digram.zip
+	mv index.html quicr-gramar.html
+
 

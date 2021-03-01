@@ -368,44 +368,51 @@ tag and popping off Tags as the packet is decoded. The order of tags is importan
 to works and the grammar is designed to be read by a recursive descent parser without backtracking.
 
 Given most modern processors are little endian, integers are encoded in little endian format and not
-network byte order.
+network byte order. Unless otherwiser specified, all intergers are
+variable lenght. 
 
 ## EBNF
 
 EBNF below can be rendered at <https://www.bottlecaps.de/rr/ui>
 
+~~~ BNF
 {{quicr.ebnf}}
+~~~
 
-## Variable length integer
+## Messages
+
+The overal messages send in the UDP packets are defined by the Message
+EBNF. 
+
+
+## Variable Length Integer
 
 The higher order bits indicate if the number is 1,2,4, or 8 bytes long; If the high order bit are 0,
 10, 110 or 111 the integer is 7, 14, 29 or 61 bits long respectively.
 
-Design choice: loosing 3 bits from 64 bit number is better than loosing 2 bits from 8 bit number.
+A> Design choice: loosing 3 bits from 64 bit number is better than loosing 2 bits from 8 bit number.
 
-## Names
+## Short Names
 
 Only short names are sent over wire. The Origin is not sent and MUST be same as what was sent in the
 Sync. Any resource or source that match the default setup in the Sync are omitted.
 
 ## Tags
 
-In general Tags consist of a tag value, length of data, and data. If the length of the data is
-always the same for the tag, the length is omitted. The tag values are 14 bit integers and encoded
-as a variable length integer.
+The tag values are 14 bit integers and encoded
+as a variable length integer. The tag contains a flag
+if it is mandatory to understand.
 
 TODO - add ref to tag definitions file
 
-When a tag is defined, it gets a short (less than 127) or long tag number, length of value, and flag
-if it is mandatory to understand.
-
 ## Header
-
-First byte in range 16-19 so it can multiplex with WebRTC. Or with spin bit could use 80 to 88. -
-see draft-aboba-avtcore-quic-multiplexing
 
 First byte of packet is a magic number that has 2 bits to indicate if it is an Sync, SyncAck, Reset,
 or Data so that firewalls can use that and one bit used for a spin bit.
+
+First byte in range 80 to 87 so it can multiplex with WebRTC. See
+draft-aboba-avtcore-quic-multiplexing. 
+
 
 ## Sync, SyncAck
 
