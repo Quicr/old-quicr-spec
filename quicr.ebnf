@@ -18,7 +18,7 @@ Rate ::= tagRate   bitRate
 
 Nack ::= tagNack   relaySeqNum
 
-Subscribe ::= tagSub  ShortName
+Subscribe ::= tagSubscribe  ShortName
 
 ClientData ::=  tagClientData clientSeqNum NamedDataChunk+
 
@@ -34,10 +34,10 @@ EncDataBlock ::=  tagEncDataBlock authTagLen
 
 DataBlock ::= tagDataBlock dataLen dataBytes
 
-Header ::=  ( tagPacketTypeSyn | tagPacketTypSynAck
-        | tagPacketTypeRst |  tagPacketTypeData
-        | tagPacketTypeSynCrazy | tagPacketTypSynAckCrazy
-        | tagPacketTypeResCrazy | tagPacketTypeDataCrazy  )
+Header ::=  ( tagHeaderSyn | tagPacketTypSynAck
+        | tagHeaderRst |  tagHeaderData
+        | tagHeaderSynCrazy | tagPacketTypSynAckCrazy
+        | tagHeaderResCrazy | tagHeaderDataCrazy  )
 
 clientSeqNum::= UInt32
 relaySeqNum ::= UInt32
