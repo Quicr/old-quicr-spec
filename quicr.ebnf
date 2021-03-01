@@ -1,4 +1,4 @@
-Message  ::= pathToken ( Sync | SyncAck | Reset | Subscribe |
+Message  ::=  ( Sync | SyncAck | Reset | Subscribe |
     Nack | Rate | Ack | 
     ( ( ClientData | RelayData)  (NamedDataChunk ( EncDataBlock | DataBlock ) data )+ ) ) Header
 
@@ -33,7 +33,7 @@ EncDataBlock ::=  tagEncDataBlock authTagLen metaDataLen cipherDataLen
 
 DataBlock ::= tagDataBlock metaDataLen dataLen 
 
-Header ::=  ( tagHeaderSyn | tagPacketTypSynAck
+Header ::=  pathToken ( tagHeaderSyn | tagPacketTypSynAck
         | tagHeaderRst |  tagHeaderData
         | tagHeaderSynCrazy | tagPacketTypSynAckCrazy
         | tagHeaderResCrazy | tagHeaderDataCrazy  )
